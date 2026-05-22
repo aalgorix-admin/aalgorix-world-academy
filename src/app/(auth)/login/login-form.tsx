@@ -5,6 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { AuthShell } from "@/components/auth/auth-shell";
+import {
+  authInputClassName,
+  authPrimaryButtonClassName,
+  authSecondaryButtonClassName,
+} from "@/components/auth/auth-field-classes";
+import { GoogleIcon } from "@/components/auth/google-icon";
 import { getDashboardPathForRole } from "@/lib/auth/redirects";
 import { isUserRole } from "@/lib/auth/roles";
 import { createClient } from "@/lib/supabase/client";
@@ -21,6 +27,25 @@ export function LoginForm() {
     urlError ? decodeURIComponent(urlError) : null,
   );
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  async function handleGoogleSignIn() {
+    setError(null);
+    setGoogleLoading(true);
+
+    const supabase = createClient();
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (oauthError) {
+      setError(oauthError.message);
+      setGoogleLoading(false);
+    }
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -60,6 +85,8 @@ export function LoginForm() {
     setLoading(false);
   }
 
+  const isBusy = loading || googleLoading;
+
   return (
     <AuthShell
       title="Welcome back"
@@ -76,7 +103,7 @@ export function LoginForm() {
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="space-y-5">
         {error ? (
           <div
             role="alert"
@@ -86,51 +113,85 @@ export function LoginForm() {
           </div>
         ) : null}
 
-        <div className="space-y-2">
-          <label htmlFor="email" className="block text-sm font-medium text-slate-200">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-white placeholder:text-slate-500 outline-none transition focus:border-indigo-400/50 focus:ring-2 focus:ring-indigo-500/30"
-            placeholder="you@example.com"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-slate-200"
-          >
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-white placeholder:text-slate-500 outline-none transition focus:border-indigo-400/50 focus:ring-2 focus:ring-indigo-500/30"
-            placeholder="••••••••"
-          />
-        </div>
-
         <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+          type="button"
+          onClick={handleGoogleSignIn}
+          disabled={isBusy}
+          className={authSecondaryButtonClassName}
         >
-          {loading ? "Signing in…" : "Sign in"}
+          <GoogleIcon />
+          {googleLoading ? "Redirecting to Google…" : "Continue with Google"}
         </button>
-      </form>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center" aria-hidden>
+            <div className="w-full border-t border-white/10" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase tracking-wide">
+            <span className="bg-transparent px-2 text-slate-400">
+              or continue with email
+            </span>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-2">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-slate-200"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={authInputClassName}
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-slate-200"
+              >
+                Password
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-xs font-medium text-indigo-300 transition hover:text-indigo-200"
+              >
+                Forgot password?
+              </Link>
+            </div>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={authInputClassName}
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isBusy}
+            className={authPrimaryButtonClassName}
+          >
+            {loading ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+      </div>
     </AuthShell>
   );
 }

@@ -3,9 +3,10 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import {
   getDashboardPathForRole,
-  isAuthPath,
   isDashboardPath,
+  isRecoveryPath,
   pathnameMatchesRole,
+  shouldRedirectSignedInUserFromAuthPath,
 } from "@/lib/auth/redirects";
 import { isUserRole, type UserRole } from "@/lib/auth/roles";
 import { getSupabaseAnonKey, getSupabaseUrl } from "@/lib/env";
@@ -42,6 +43,14 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  if (!user && isRecoveryPath(pathname)) {
+    loginUrl.searchParams.set(
+      "error",
+      "Your reset link has expired. Please request a new one.",
+    );
+    return NextResponse.redirect(loginUrl);
+  }
+
   if (!user) {
     return supabaseResponse;
   }
@@ -55,7 +64,7 @@ export async function updateSession(request: NextRequest) {
   const role: UserRole | null =
     profile?.role && isUserRole(profile.role) ? profile.role : null;
 
-  if (isAuthPath(pathname)) {
+  if (shouldRedirectSignedInUserFromAuthPath(pathname)) {
     const destination = role
       ? getDashboardPathForRole(role)
       : (request.nextUrl.searchParams.get("next") ?? "/");

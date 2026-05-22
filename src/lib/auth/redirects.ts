@@ -36,11 +36,43 @@ export function isDashboardPath(pathname: string): boolean {
   );
 }
 
-export const AUTH_PATHS = ["/login", "/signup", "/forgot-password"] as const;
+export const AUTH_PATHS = [
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+] as const;
+
+/** Paths that must stay reachable while authenticated (e.g. password recovery). */
+export const AUTH_PATHS_ALLOW_WHEN_SIGNED_IN = ["/reset-password"] as const;
 
 export function isAuthPath(pathname: string): boolean {
   return (
     AUTH_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`)) ||
     pathname.startsWith("/auth/")
   );
+}
+
+export function isRecoveryPath(pathname: string): boolean {
+  return (
+    pathname === "/reset-password" || pathname.startsWith("/reset-password/")
+  );
+}
+
+export function shouldRedirectSignedInUserFromAuthPath(pathname: string): boolean {
+  return isAuthPath(pathname) && !isRecoveryPath(pathname);
+}
+
+/**
+ * Validates an internal post-auth redirect path from query params.
+ * Rejects open redirects and external URLs.
+ */
+export function safeRedirectPath(next: string | null): string | null {
+  if (!next || next === "/") {
+    return null;
+  }
+  if (!next.startsWith("/") || next.startsWith("//")) {
+    return null;
+  }
+  return next;
 }
