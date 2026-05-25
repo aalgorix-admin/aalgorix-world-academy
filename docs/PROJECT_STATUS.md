@@ -1,9 +1,9 @@
 # Aalgorix World Academy — Engineering Source of Truth
 
 **Repository:** `aalgorix-world-academy`  
-**Document version:** 1.0  
+**Document version:** 1.1  
 **Last updated:** May 2026  
-**Status:** Phase 0–1 complete · Production builds passing · Billing deferred to finale
+**Status:** Phase 0–1 complete · Marketing Landing Page Live · Navigation Core Stabilized · Production builds passing · Billing deferred to finale
 
 ---
 
@@ -13,7 +13,7 @@
 
 **Aalgorix World Academy** is a premium, highly scalable EdTech platform and Learning Management System (LMS) modeled on the pedagogical and commercial workflows of [CambriLearn](https://www.cambrilearn.com). The system targets four distinct actor classes—**Students**, **Parents**, **Teachers**, and **Admins**—within a single academy tenant, with curriculum delivery, gated content progression, assignment lifecycles, and (eventually) subscription-gated enrollment.
 
-The platform is being constructed as a **modular monolith** on Next.js, with PostgreSQL row-level security as the authoritative authorization plane and Supabase as the managed backend substrate.
+The platform is being constructed as a **modular monolith** on Next.js, with PostgreSQL row-level security as the authoritative authorization plane and Supabase as the managed backend substrate. The **public marketing gateway** at `/` is live, presenting the full CambriLearn-formula acquisition surface ahead of LMS feature delivery.
 
 ### 1.2 Technology Stack (Authoritative)
 
@@ -24,7 +24,8 @@ The platform is being constructed as a **modular monolith** on Next.js, with Pos
 | **UI runtime** | React | 19.2.x |
 | **Compiler optimization** | React Compiler | Enabled via `reactCompiler: true` in `next.config.ts` and `babel-plugin-react-compiler` |
 | **Styling** | Tailwind CSS | v4 (`@import "tailwindcss"`, `@theme inline` in `globals.css`) |
-| **Component library** | shadcn/ui | **Planned** — not yet initialized; auth UI currently uses bespoke Tailwind primitives |
+| **Component library** | shadcn/ui | **Planned** — not yet initialized; auth and marketing surfaces use bespoke Tailwind primitives |
+| **Public marketing UI** | Next.js Route Groups + Tailwind v4 | `(marketing)` route group at `/`; native utility tokens only; React Compiler–verified production builds |
 | **Database** | PostgreSQL (Supabase) | Foundation migration deployed |
 | **Auth** | Supabase Auth | Email/password, Google OAuth, password recovery |
 | **Object storage** | Supabase Storage | Buckets documented; policies pending Phase 3+ |
@@ -40,6 +41,17 @@ Configuration is driven by `.env.local` (see `.env.local.example`):
 - `SUPABASE_SERVICE_ROLE_KEY` (server-only; webhooks in finale)
 - Stripe keys (reserved, unused until finale)
 - `NEXT_PUBLIC_APP_URL`
+
+### 1.4 Engineering attributions (presentation layer)
+
+The initial public gateway is implemented without third-party UI kits. The following conventions are authoritative for all marketing and auth presentation work:
+
+| Attribution | Implementation detail |
+|-------------|----------------------|
+| **Styling substrate** | Native **Tailwind CSS v4** primitive tokens and utilities (`@import "tailwindcss"`, `@theme inline` in `src/app/globals.css`) — no component-library abstraction layer on the marketing surface |
+| **Route organization** | **Next.js 16 parenthetical Route Groups** — `(marketing)`, `(auth)`, and `(dashboard)` isolate directory concerns without altering URL segments, preserving a clean security boundary between public, identity, and authenticated shells |
+| **Compilation** | **Automatic React Compiler** (`reactCompiler: true` in `next.config.ts`) — marketing Server Components and the navigation client island compile cleanly under `npm run build` with zero manual memoization |
+| **Client boundaries** | Interactive navigation (mobile drawer, portal overlay) is isolated to a single `"use client"` module; the page body remains a Server Component for optimal hydration and SEO |
 
 ---
 
@@ -165,9 +177,35 @@ Minimal Server Component placeholders exist to validate routing—not product da
 
 ---
 
+### 2.3 Phase 1b — Public Marketing Gateway ✅
+
+The primary public-facing presentation layer is **fully implemented and live** at `/`, replacing the interim minimal landing stub.
+
+| Deliverable | Status | Operational files |
+|-------------|--------|-------------------|
+| **Public marketing layout shell** | ✅ Complete | `src/app/(marketing)/layout.tsx` — light-theme wrapper, route-level metadata |
+| **CambriLearn-formula landing page** | ✅ Complete | `src/app/(marketing)/page.tsx` — announcement bar, hero, social proof, curricula grid, onboarding pipeline, benefits, pricing band, footer (Server Component) |
+| **Sticky navigation & mobile drawer** | ✅ Complete | `src/app/(marketing)/marketing-nav.tsx` — optimized client boundary: portal-based drawer, `h-dvh` viewport alignment, hydration mount guard, touch-hardened open handlers |
+
+**Surface coverage (verified):**
+
+- [x] Top accreditation announcement strip
+- [x] Sticky desktop/mobile navigation with `/login` and `/signup` CTAs
+- [x] Split-column conversion hero with Tailwind-built platform mockup
+- [x] Four-column social proof metrics strip
+- [x] Curricula pathways selector grid (four flagship tracks)
+- [x] Four-step “How Online School Works” pipeline
+- [x] Academy benefits / SLA feature grid
+- [x] Pricing presentation band (pre-Stripe placeholder tiers)
+- [x] Multi-column marketing footer
+
+**Navigation hardening:** Mobile menu uses `createPortal` to `document.body`, strict `isMounted` client guard, `pointer-events-auto` tap targets (44×44px minimum), `stopPropagation` on open/close handlers, and dynamic viewport units (`h-dvh`) for physical iOS/Android device reliability.
+
+---
+
 ## 3. Directory Structure Map
 
-**Implemented tree (Phase 0–1 reality):**
+**Implemented tree (Phase 0–1 + marketing gateway):**
 
 ```
 aalgorix-world-academy/
@@ -185,7 +223,11 @@ aalgorix-world-academy/
 │   ├── app/
 │   │   ├── layout.tsx           # Root HTML shell, Geist fonts, metadata
 │   │   ├── globals.css          # Tailwind v4 @theme tokens
-│   │   ├── page.tsx             # Public landing (login/signup CTAs)
+│   │   │
+│   │   ├── (marketing)/         # ◄ Public gateway (route group, serves /)
+│   │   │   ├── layout.tsx       # Marketing shell + metadata
+│   │   │   ├── page.tsx         # Full CambriLearn-formula landing (RSC)
+│   │   │   └── marketing-nav.tsx  # Client island: sticky nav + mobile drawer
 │   │   │
 │   │   ├── (auth)/              # ◄ Unauthenticated auth UX (route group, no URL segment)
 │   │   │   ├── layout.tsx
@@ -226,6 +268,7 @@ aalgorix-world-academy/
 | `src/proxy.ts` | **Edge network gate** | Executes before route handlers; refreshes Supabase cookies; enforces authentication and role-prefix alignment on every matched request. |
 | `src/lib/supabase/` | **Data access adapters** | Framework-correct SSR cookie bridging. Separates browser vs server runtimes per Supabase guidance. |
 | `src/lib/auth/` | **Authorization vocabulary** | Pure TypeScript role types and path algebra—keeps proxy and callback logic DRY. |
+| `src/app/(marketing)/` | **Public gateway** | Unauthenticated marketing presentation at `/`; Tailwind v4 primitives; minimal client boundary in `marketing-nav.tsx`. |
 | `src/app/(auth)/` | **Identity acquisition** | Sign-in, registration, and credential recovery without exposing dashboard chrome. |
 | `src/app/(dashboard)/` | **Role-scoped product surface** | Future home for LMS workflows; currently stubbed post-auth landing zones. |
 | `src/app/auth/callback/` | **Auth handshake termination** | Converts OAuth/recovery `code` query param into HTTP-only session cookies. |
@@ -281,7 +324,8 @@ Phases are ordered for **vertical slice delivery**. **Stripe billing is intentio
 |-------|------|-------|----------------------|
 | **0** | Foundation | ✅ **Complete** | SQL migration, RLS shell, architecture docs |
 | **1** | Auth & Identity | ✅ **Complete** | SSR clients, proxy gate, email/Google OAuth, password recovery, role routing |
-| **3** | Course Catalog & Storage | 🔜 Next | Admin course CRUD (`courses` → `course_modules` → `lessons`), Supabase Storage buckets + policies, published curriculum on marketing surface |
+| **1b** | Public Marketing Gateway | ✅ **Complete** | `(marketing)` route group, full landing at `/`, sticky nav + mobile drawer, Tailwind v4 + React Compiler verified |
+| **3** | Course Catalog & Storage | 🔜 Next | Admin course CRUD (`courses` → `course_modules` → `lessons`), Supabase Storage buckets + policies, dynamic curriculum data wired into marketing pathways |
 | **4** | Student LMS Workspace | 🔜 Planned | Interactive course player, recursive sidebar navigation tree, HTML5 video element, assignment submission dropzone, `content_unlocks` engine tied to `lesson_progress` |
 | **5** | Teacher Portal & Grading Queue | 🔜 Planned | Homework downloads from Storage, feedback logs, 0–100 grade indexing, `teacher_course_assignments` scoped queues |
 | **6** | Parent Performance Dashboard | 🔜 Planned | Multi-child selector dropdowns, aggregate progress trackers, read-only grading report access via `parent_has_student()` RLS |
@@ -312,7 +356,7 @@ Phase 0 ──► Phase 1 ──► Phase 3 (Catalog)
 
 - shadcn/ui component installation and design system tokens
 - Stripe Checkout, webhooks, and `api/webhooks/stripe`
-- Marketing route group `(marketing)` beyond minimal `/` landing
+- Dynamic CMS-driven marketing copy (pathways currently static in `page.tsx`)
 - Real-time messaging, live classes, quiz engine, certificates
 - Multi-organization white-label tenancy
 
@@ -323,7 +367,7 @@ Phase 0 ──► Phase 1 ──► Phase 3 (Catalog)
 | Check | Command / action |
 |-------|------------------|
 | Production compile | `npm run build` |
-| Local dev | `npm run dev` → `http://localhost:3000` |
+| Local dev + marketing | `npm run dev` → `http://localhost:3000` — verify hero, section anchors, `/login` & `/signup` CTAs, mobile drawer on physical device |
 | DB tables | Supabase Table Editor → 13 `public` tables |
 | Google OAuth | `/login` → Continue with Google → role dashboard |
 | Password recovery | `/forgot-password` → email → `/reset-password` → dashboard |
