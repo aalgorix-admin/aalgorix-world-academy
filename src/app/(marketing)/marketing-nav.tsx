@@ -1,28 +1,111 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useRef } from "react";
 
-const NAV_LINKS = [
-  { href: "/courses", label: "Courses" },
-  { href: "#how-it-works", label: "How It Works" },
-  { href: "#curricula-pathways", label: "Curricula Pathways" },
-  { href: "#published-courses", label: "Live Catalog" },
-  { href: "#academy-benefits", label: "Academy Benefits" },
-  { href: "#pricing", label: "Pricing" },
+type NavLink = Readonly<{
+  href: string;
+  label: string;
+}>;
+
+type NavNode =
+  | Readonly<{
+      type: "dropdown";
+      id: string;
+      label: string;
+      items: ReadonlyArray<NavLink>;
+    }>
+  | Readonly<{
+      type: "link";
+      id: string;
+      label: string;
+      href: string;
+    }>;
+
+const NAV_NODES: ReadonlyArray<NavNode> = [
+  {
+    type: "dropdown",
+    id: "academics",
+    label: "Academics",
+    items: [
+      { href: "#curricula-pathways", label: "Curricula Pathways" },
+      { href: "#how-it-works", label: "Learning Model" },
+      { href: "#published-courses", label: "Global Showroom" },
+    ],
+  },
+  {
+    type: "dropdown",
+    id: "extracurricular",
+    label: "Extracurricular",
+    items: [
+      { href: "#academy-benefits", label: "AI Cognitive Tutor" },
+      { href: "#how-it-works", label: "The Aalgorix Edge" },
+      { href: "#curricula-pathways", label: "Talent & Athlete Support" },
+    ],
+  },
+  {
+    type: "link",
+    id: "ai-tutor",
+    label: "AI Tutor",
+    href: "#ai-tutor",
+  },
+  {
+    type: "dropdown",
+    id: "parent-portal",
+    label: "Parent Portal",
+    items: [
+      { href: "#parent-faq-vault", label: "Parent FAQ Vault" },
+      { href: "#global-family-community", label: "Global Family Community" },
+      { href: "#accountability-handbook", label: "Accountability Handbook" },
+    ],
+  },
+  {
+    type: "dropdown",
+    id: "about-us",
+    label: "About Us",
+    items: [
+      { href: "#our-story", label: "Our Story & Philosophy" },
+      { href: "#admission-enquiries", label: "Admission Enquiries" },
+      { href: "#careers", label: "Careers" },
+      { href: "#blog", label: "Blog" },
+      { href: "#contact-support", label: "Contact Support" },
+    ],
+  },
 ] as const;
+
+type DropdownId = Extract<NavNode, { type: "dropdown" }>["id"];
 
 const DRAWER_TRANSITION_MS = 300;
 
 const linkClassName =
   "rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 active:scale-[0.98]";
 
+const dropdownTriggerClassName =
+  "inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-all duration-200 ease-out hover:bg-slate-100 hover:text-slate-900 active:scale-[0.98]";
+
+const dropdownPanelWrapperClassName = "absolute top-full left-0 pt-2";
+
+const dropdownPanelCardClassName =
+  "w-64 rounded-xl border border-slate-200 bg-white p-4 shadow-xl transition-all duration-200 ease-out";
+
+const dropdownItemClassName =
+  "block rounded-lg px-3 py-2 text-sm text-slate-600 transition-all duration-200 ease-out hover:bg-slate-50 hover:text-slate-900 active:scale-[0.98]";
+
 const ctaClassName =
   "inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-500 hover:to-violet-500 active:scale-[0.98]";
 
 const mobileNavLinkClassName =
   "block w-full border-b border-slate-100 pb-4 text-base font-bold tracking-tight text-slate-800 transition-colors duration-200 hover:text-indigo-600 active:scale-[0.98]";
+
+const mobileNavGroupClassName = "border-b border-slate-100 pb-4";
+
+const mobileNavGroupLabelClassName = "text-xs font-bold uppercase tracking-widest text-slate-400";
+
+const mobileNavSubLinkClassName =
+  "block w-full py-2.5 pl-4 text-sm font-semibold text-slate-600 transition-all duration-200 ease-out hover:text-indigo-600 active:scale-[0.98]";
 
 const menuButtonClassName =
   "relative z-50 inline-flex h-11 min-h-11 w-11 min-w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-800 shadow-sm transition-all duration-200 hover:bg-slate-50 active:scale-[0.98] pointer-events-auto touch-manipulation select-none";
@@ -57,14 +140,31 @@ function MenuIcon() {
   );
 }
 
+function ChevronDownIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      className={`h-4 w-4 transition-transform duration-200 ease-out ${open ? "rotate-180" : ""}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 7.5l5 5 5-5" />
+    </svg>
+  );
+}
+
 function BrandMark() {
   return (
-    <span className="text-sm font-extrabold tracking-tight text-slate-900 sm:text-base">
-      <span className="bg-gradient-to-r from-indigo-700 to-violet-700 bg-clip-text text-transparent">
-        AALGORIX
-      </span>{" "}
-      <span>WORLD ACADEMY</span>
-    </span>
+    <Image
+      src="/brand/awa-logo.svg"
+      alt="Aalgorix World Academy Logo"
+      width={150}
+      height={40}
+      className="h-8 w-auto sm:h-10"
+      priority
+    />
   );
 }
 
@@ -75,12 +175,74 @@ function normalizeMenuTap(
   event.stopPropagation();
 }
 
+function NavDropdown({
+  id,
+  label,
+  items,
+  openDropdown,
+  onToggle,
+  onSelect,
+}: {
+  id: DropdownId;
+  label: string;
+  items: ReadonlyArray<NavLink>;
+  openDropdown: DropdownId | null;
+  onToggle: (id: DropdownId) => void;
+  onSelect: () => void;
+}) {
+  const isOpen = openDropdown === id;
+
+  const visibleClassName = isOpen
+    ? "opacity-100 pointer-events-auto translate-y-0"
+    : "opacity-0 pointer-events-none -translate-y-1 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0";
+
+  return (
+    <div className="relative group">
+      <button
+        type="button"
+        className={dropdownTriggerClassName}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        onClick={() => onToggle(id)}
+      >
+        {label}
+        <ChevronDownIcon open={isOpen} />
+      </button>
+
+      <div
+        className={`${dropdownPanelWrapperClassName} ${visibleClassName} transition-all duration-200 ease-out`}
+        role="menu"
+        aria-hidden={!isOpen}
+      >
+        <div className={dropdownPanelCardClassName}>
+          <ul className="space-y-1">
+            {items.map((item) => (
+              <li key={item.href + item.label} role="none">
+                <a
+                  href={item.href}
+                  className={dropdownItemClassName}
+                  role="menuitem"
+                  onClick={onSelect}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function MarketingNav() {
   const [isMounted, setIsMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [drawerMounted, setDrawerMounted] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<DropdownId | null>(null);
+  const desktopNavRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -93,6 +255,21 @@ export function MarketingNav() {
 
   const closeMobile = useCallback(() => {
     setMobileOpen(false);
+  }, []);
+
+  const handleLogoClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (typeof window === "undefined") return;
+    if (window.location.pathname !== "/") return;
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const toggleDropdownMenu = useCallback((id: DropdownId) => {
+    setOpenDropdown((current) => (current === id ? null : id));
+  }, []);
+
+  const closeDropdownMenu = useCallback(() => {
+    setOpenDropdown(null);
   }, []);
 
   const openMobile = useCallback(
@@ -146,13 +323,27 @@ export function MarketingNav() {
   }, [isMounted, drawerMounted]);
 
   useEffect(() => {
-    if (!isMounted || !drawerMounted) return;
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") closeMobile();
+      if (event.key === "Escape") {
+        setOpenDropdown(null);
+        if (drawerMounted) closeMobile();
+      }
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [isMounted, drawerMounted, closeMobile]);
+  }, [drawerMounted, closeMobile]);
+
+  useEffect(() => {
+    if (!openDropdown) return;
+    function onPointerDown(event: PointerEvent) {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (desktopNavRef.current?.contains(target)) return;
+      setOpenDropdown(null);
+    }
+    document.addEventListener("pointerdown", onPointerDown, { capture: true });
+    return () => document.removeEventListener("pointerdown", onPointerDown, { capture: true } as any);
+  }, [openDropdown]);
 
   const mobileDrawer =
     isMounted && drawerMounted && portalTarget
@@ -182,7 +373,10 @@ export function MarketingNav() {
                 <Link
                   href="/"
                   className="min-w-0 transition-all duration-200 active:scale-[0.98]"
-                  onClick={closeMobile}
+                  onClick={(event) => {
+                    handleLogoClick(event);
+                    closeMobile();
+                  }}
                 >
                   <BrandMark />
                 </Link>
@@ -200,16 +394,35 @@ export function MarketingNav() {
                 className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain"
                 aria-label="Mobile"
               >
-                {NAV_LINKS.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    className={mobileNavLinkClassName}
-                    onClick={closeMobile}
-                  >
-                    {item.label}
-                  </a>
-                ))}
+                {NAV_NODES.map((node) =>
+                  node.type === "dropdown" ? (
+                    <div key={node.id} className={mobileNavGroupClassName}>
+                      <p className={mobileNavGroupLabelClassName}>{node.label}</p>
+                      <ul className="mt-3 space-y-1 border-l-2 border-indigo-100 pl-3">
+                        {node.items.map((item) => (
+                          <li key={item.href + item.label}>
+                            <a
+                              href={item.href}
+                              className={mobileNavSubLinkClassName}
+                              onClick={closeMobile}
+                            >
+                              {item.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <a
+                      key={node.id}
+                      href={node.href}
+                      className={mobileNavLinkClassName}
+                      onClick={closeMobile}
+                    >
+                      {node.label}
+                    </a>
+                  ),
+                )}
               </nav>
 
               <div className="mt-6 flex shrink-0 flex-col gap-3 border-t border-slate-100 pt-6">
@@ -240,29 +453,37 @@ export function MarketingNav() {
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
           <Link
             href="/"
-            className="relative z-10 min-w-0 flex-1 truncate transition-all duration-200 active:scale-[0.98] pointer-events-auto"
+            className="relative z-10 shrink-0 transition-all duration-200 active:scale-[0.98] pointer-events-auto"
+            onClick={handleLogoClick}
           >
-            <span className="block truncate text-sm font-extrabold tracking-tight text-slate-900 sm:text-base">
-              <span className="bg-gradient-to-r from-indigo-700 to-violet-700 bg-clip-text text-transparent">
-                AALGORIX
-              </span>{" "}
-              <span className="hidden sm:inline">WORLD ACADEMY</span>
-              <span className="sm:hidden">AWA</span>
-            </span>
+            <BrandMark />
           </Link>
 
-          <nav
-            className="hidden items-center gap-1 lg:flex"
+          <div
+            ref={desktopNavRef}
+            className="hidden flex-1 justify-center gap-x-2 lg:flex lg:gap-x-2"
             aria-label="Primary"
           >
-            {NAV_LINKS.map((item) => (
-              <a key={item.href} href={item.href} className={linkClassName}>
-                {item.label}
-              </a>
-            ))}
-          </nav>
+            {NAV_NODES.map((node) =>
+              node.type === "dropdown" ? (
+                <NavDropdown
+                  key={node.id}
+                  id={node.id}
+                  label={node.label}
+                  items={node.items}
+                  openDropdown={openDropdown}
+                  onToggle={toggleDropdownMenu}
+                  onSelect={closeDropdownMenu}
+                />
+              ) : (
+                <a key={node.id} href={node.href} className={linkClassName} onClick={closeDropdownMenu}>
+                  {node.label}
+                </a>
+              ),
+            )}
+          </div>
 
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="hidden shrink-0 items-center justify-end gap-x-4 lg:flex">
             <Link href="/login" className={linkClassName}>
               Sign In
             </Link>

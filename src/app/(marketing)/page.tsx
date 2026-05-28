@@ -120,23 +120,23 @@ const FEATURES = [
 const PROOF_STATS = [
   {
     value: "98%",
-    label: "University Acceptance",
-    detail: "Accepted at Oxford, Cambridge, Harvard, Stanford",
+    label: "Ivy League & Oxbridge Acceptance",
+    detail: "Graduates accepted at Oxford, Cambridge, Harvard, and Stanford.",
   },
   {
-    value: "80,000+",
-    label: "Students Worldwide",
-    detail: "Global cohort across time zones",
+    value: "100%",
+    label: "NCAA & Matrix Compliant",
+    detail: "Fully certified curriculum pathways for global student-athletes.",
   },
   {
-    value: "100+",
-    label: "Countries Served",
-    detail: "Expatriate and homeschooling families",
+    value: "24/7",
+    label: "Global Learner Support",
+    detail: "On-demand academic mentorship across international time zones.",
   },
   {
-    value: "4.7★",
-    label: "Average Parent Rating",
-    detail: "Verified family satisfaction scores",
+    value: "8-Days",
+    label: "Guaranteed Assignment Turnaround",
+    detail: "Expert teacher-marked papers with comprehensive analytical feedback loops.",
   },
 ] as const;
 
@@ -176,8 +176,8 @@ export default function MarketingPage() {
       {/* 1. Top announcement bar */}
       <div className="bg-gradient-to-r from-indigo-700 via-violet-700 to-indigo-800 px-4 py-2.5 text-center text-xs font-medium tracking-wide text-white sm:text-sm">
         <p>
-          Cognia Accredited &amp; NCAA Approved for International University Admissions
-          <span className="mx-2 hidden opacity-60 sm:inline">|</span>
+          ⚡ Enrolling for the 2026 Academic Term: Secure Your Child&apos;s Global Placement
+          Passport Today |{" "}
           <Link
             href="#how-it-works"
             className="mt-1 inline-block underline decoration-white/40 underline-offset-2 transition-all duration-200 hover:decoration-white active:scale-[0.98] sm:mt-0 sm:inline"
@@ -239,7 +239,7 @@ export default function MarketingPage() {
                   <span className="h-3 w-3 rounded-full bg-amber-400" />
                   <span className="h-3 w-3 rounded-full bg-emerald-400" />
                   <span className="ml-2 text-xs font-medium text-slate-400">
-                    Student Workspace
+                    Aalgorix Cockpit Terminal v1.4
                   </span>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-5">
@@ -254,7 +254,7 @@ export default function MarketingPage() {
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-3 py-2">
                         <p className="text-xs font-medium text-white">
-                          Live Class Recording · Mathematics AS
+                          Live Broadcast Masterclass — Advanced Analytical Mathematics
                         </p>
                       </div>
                     </div>
@@ -291,7 +291,7 @@ export default function MarketingPage() {
                       <p className="text-xs font-semibold text-indigo-900">Assignments</p>
                       <ul className="mt-2 space-y-1.5 text-[11px] text-slate-600">
                         <li className="flex justify-between">
-                          <span>Essay — History</span>
+                          <span>Assignment 4: Complex Vectors &amp; Matrices</span>
                           <span className="font-medium text-amber-700">Due Fri</span>
                         </li>
                         <li className="flex justify-between">
@@ -454,8 +454,9 @@ export default function MarketingPage() {
                 Flexible Plans
               </h2>
               <p className="mt-4 text-lg text-slate-600">
-                Transparent monthly pathways—upgrade as your learner progresses. Full billing
-                integration arrives in a later release.
+                Transparent monthly pathways—upgrade as your learner progresses. All tracks
+                include premium digital resources, dedicated academic mentor mapping, and
+                verified parent accountability dashboards.
               </p>
             </div>
             <div className="mt-14 grid gap-6 lg:grid-cols-3">
@@ -607,13 +608,19 @@ export default function MarketingPage() {
               </h3>
               <ul className="mt-4 space-y-2 text-sm">
                 <li>
-                  <span className="text-slate-500">Admissions Guide (coming soon)</span>
+                  <a href="#how-it-works" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
+                    Admissions Guide
+                  </a>
                 </li>
                 <li>
-                  <span className="text-slate-500">University Tracker (coming soon)</span>
+                  <a href="#curricula-pathways" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
+                    University Tracker
+                  </a>
                 </li>
                 <li>
-                  <span className="text-slate-500">Parent Handbook (coming soon)</span>
+                  <a href="#academy-benefits" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
+                    Parent Handbook
+                  </a>
                 </li>
                 <li>
                   <Link href="/signup" className="font-semibold text-indigo-300 transition-all duration-200 hover:text-white active:scale-[0.98]">
