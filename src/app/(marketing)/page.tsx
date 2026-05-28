@@ -433,76 +433,10 @@ export default function MarketingPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-10 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 to-violet-50 p-6 text-center sm:p-8">
-              <p className="text-sm font-semibold text-indigo-900">
-                Assessment SLA: written feedback returned within{" "}
-                <span className="font-extrabold">8 working days</span> on all teacher-marked
-                submissions.
-              </p>
-            </div>
           </div>
         </section>
 
-        {/* Pricing — nav anchor */}
-        <section id="pricing" className="scroll-mt-20 border-t border-slate-100 bg-slate-50 py-20 sm:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-                Flexible Plans
-              </h2>
-              <p className="mt-4 text-lg text-slate-600">
-                Transparent monthly pathways—upgrade as your learner progresses. All tracks
-                include premium digital resources, dedicated academic mentor mapping, and
-                verified parent accountability dashboards.
-              </p>
-            </div>
-            <div className="mt-14 grid gap-6 lg:grid-cols-3">
-              {PRICING_TIERS.map((tier) => (
-                <div
-                  key={tier.name}
-                  className={`flex flex-col rounded-2xl border p-8 ${
-                    "highlight" in tier && tier.highlight
-                      ? "border-indigo-300 bg-white shadow-xl shadow-indigo-100 ring-2 ring-indigo-500"
-                      : "border-slate-200 bg-white shadow-sm"
-                  }`}
-                >
-                  {"highlight" in tier && tier.highlight ? (
-                    <span className="mb-4 w-fit rounded-full bg-indigo-600 px-3 py-1 text-xs font-bold text-white">
-                      Most Popular
-                    </span>
-                  ) : (
-                    <span className="mb-4 h-6" />
-                  )}
-                  <h3 className="text-xl font-bold text-slate-900">{tier.name}</h3>
-                  <p className="mt-2">
-                    <span className="text-3xl font-extrabold text-slate-900">{tier.price}</span>
-                    <span className="text-sm text-slate-500">{tier.period}</span>
-                  </p>
-                  <ul className="mt-6 flex-1 space-y-3 text-sm text-slate-600">
-                    {tier.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <span className="mt-0.5 text-emerald-600" aria-hidden>
-                          ✓
-                        </span>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/signup"
-                    className={
-                      "highlight" in tier && tier.highlight
-                        ? btnPrimary + " mt-8 w-full"
-                        : btnGhost + " mt-8 w-full"
-                    }
-                  >
-                    Get Started
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        
 
         {/* CTA band */}
         <section className="bg-gradient-to-r from-indigo-700 via-violet-700 to-indigo-800 py-16 text-white">
@@ -516,10 +450,10 @@ export default function MarketingPage() {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
-                href="/signup"
+                href="/contact"
                 className="inline-flex rounded-xl bg-white px-6 py-3 text-sm font-semibold text-indigo-800 transition-all duration-200 hover:bg-indigo-50 active:scale-[0.98]"
               >
-                Enroll Your Child
+                Book a Free Consultation
               </Link>
               <Link
                 href="/login"
@@ -528,6 +462,10 @@ export default function MarketingPage() {
                 Sign In
               </Link>
             </div>
+            <p className="mt-4 text-xs text-indigo-100">
+              Free consultation <span className="mx-2 opacity-60">·</span> No obligation{" "}
+              <span className="mx-2 opacity-60">·</span> Response within 24 hours
+            </p>
           </div>
         </section>
       </main>
