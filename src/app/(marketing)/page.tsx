@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { MarketingNav } from "./marketing-nav";
+import { BrochureModalCta } from "./brochure-modal-cta";
 import { PublishedCoursesSection } from "./published-courses-section";
 
 const btnPrimary =
@@ -202,29 +203,25 @@ export default function MarketingPage() {
             className="pointer-events-none absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-indigo-200/30 blur-3xl"
           />
 
-          <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8 lg:py-24">
+          <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8 lg:py-16">
             <div>
               <p className="mb-4 inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-indigo-800">
-                Accredited Online Academy
+              Prepare your child for an Algorithmic Tomorrow
               </p>
               <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-[3.25rem]">
-                One Academy.{" "}
+              Holistic Elite Education.{" "}
                 <span className="bg-gradient-to-r from-indigo-700 to-violet-700 bg-clip-text text-transparent">
-                  Six Accredited Curricula Pathways.
+                  Driven by AI Cognitive Tutor.
                 </span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">
-                Provide your child with internationally recognized schooling taught by
-                degree-qualified specialist teachers. Flexible pacing tailored for
-                homeschooling, elite athletes, and global families.
+              We protect your child’s well-being while identifying their core strengths, cultivating vital communication skills, and farming their distinct talents for an automated tomorrow.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link href="/signup" className={btnPrimary}>
                   Enroll Your Child
                 </Link>
-                <a href="#how-it-works" className={btnGhost}>
-                  Speak with an Advisor
-                </a>
+                <BrochureModalCta className={btnGhost} />
               </div>
               <p className="mt-6 text-sm text-slate-500">
                 7-day trial available · No credit card required to consult
@@ -331,7 +328,7 @@ export default function MarketingPage() {
         {/* 5. Curricula pathways */}
         <section
           id="curricula-pathways"
-          className="scroll-mt-24 bg-white py-20 sm:py-24"
+          className="scroll-mt-20 bg-white py-18 sm:py-20"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
@@ -374,7 +371,7 @@ export default function MarketingPage() {
         {/* 6. How online school works */}
         <section
           id="how-it-works"
-          className="scroll-mt-24 border-t border-slate-100 bg-slate-50 py-20 sm:py-24"
+          className="scroll-mt-20 border-t border-slate-100 bg-slate-50 py-18 sm:py-20"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
@@ -410,7 +407,7 @@ export default function MarketingPage() {
         {/* 7. Ecosystem advantages */}
         <section
           id="academy-benefits"
-          className="scroll-mt-24 bg-white py-20 sm:py-24"
+          className="scroll-mt-20 bg-white py-20 sm:py-24"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
@@ -447,7 +444,7 @@ export default function MarketingPage() {
         </section>
 
         {/* Pricing — nav anchor */}
-        <section id="pricing" className="scroll-mt-24 border-t border-slate-100 bg-slate-50 py-20 sm:py-24">
+        <section id="pricing" className="scroll-mt-20 border-t border-slate-100 bg-slate-50 py-20 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
