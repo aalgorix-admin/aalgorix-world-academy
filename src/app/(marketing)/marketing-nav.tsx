@@ -2,9 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type NavLink = Readonly<{
   href: string;
@@ -78,7 +76,22 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
 
 type DropdownId = Extract<NavNode, { type: "dropdown" }>["id"];
 
-const DRAWER_TRANSITION_MS = 300;
+const POPOVER_TRANSITION_MS = 300;
+
+const mobilePopoverShellClassName =
+  "absolute top-18 right-4 z-50 w-72 origin-top-right md:w-80 lg:hidden";
+
+const mobilePopoverCardClassName =
+  "overflow-hidden rounded-2xl border border-slate-200/20 bg-white/90 shadow-2xl backdrop-blur-xl";
+
+const mobileAccordionTriggerClassName =
+  "flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-800 transition-all duration-300 hover:bg-slate-100/80 active:scale-[0.98]";
+
+const mobileSubLinkClassName =
+  "block w-full rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-all duration-300 hover:bg-slate-100/80 hover:text-indigo-600 active:scale-[0.98]";
+
+const mobileDirectLinkClassName =
+  "flex w-full items-center rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 transition-all duration-300 hover:bg-slate-100/80 active:scale-[0.98]";
 
 const linkClassName =
   "rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 active:scale-[0.98]";
@@ -97,33 +110,8 @@ const dropdownItemClassName =
 const ctaClassName =
   "inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-500 hover:to-violet-500 active:scale-[0.98]";
 
-const mobileNavLinkClassName =
-  "block w-full border-b border-slate-100 pb-4 text-base font-bold tracking-tight text-slate-800 transition-colors duration-200 hover:text-indigo-600 active:scale-[0.98]";
-
-const mobileNavGroupClassName = "border-b border-slate-100 pb-4";
-
-const mobileNavGroupLabelClassName = "text-xs font-bold uppercase tracking-widest text-slate-400";
-
-const mobileNavSubLinkClassName =
-  "block w-full py-2.5 pl-4 text-sm font-semibold text-slate-600 transition-all duration-200 ease-out hover:text-indigo-600 active:scale-[0.98]";
-
 const menuButtonClassName =
   "relative z-50 inline-flex h-11 min-h-11 w-11 min-w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-800 shadow-sm transition-all duration-200 hover:bg-slate-50 active:scale-[0.98] pointer-events-auto touch-manipulation select-none";
-
-function CloseIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-6 w-6"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.25"
-      aria-hidden
-    >
-      <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
-    </svg>
-  );
-}
 
 function MenuIcon() {
   return (
@@ -140,11 +128,26 @@ function MenuIcon() {
   );
 }
 
+function CloseIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-6 w-6 pointer-events-none"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.25"
+      aria-hidden
+    >
+      <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+
 function ChevronDownIcon({ open }: { open: boolean }) {
   return (
     <svg
       viewBox="0 0 20 20"
-      className={`h-4 w-4 transition-transform duration-200 ease-out ${open ? "rotate-180" : ""}`}
+      className={`h-4 w-4 shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${open ? "rotate-180" : ""}`}
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -168,11 +171,129 @@ function BrandMark() {
   );
 }
 
-function normalizeMenuTap(
-  event: React.MouseEvent<HTMLButtonElement> | React.PointerEvent<HTMLButtonElement>,
-) {
+function normalizeMenuTap(event: React.MouseEvent<HTMLButtonElement>) {
   event.preventDefault();
   event.stopPropagation();
+}
+
+function MobileAccordionSection({
+  id,
+  label,
+  items,
+  isExpanded,
+  onToggle,
+  onNavigate,
+}: {
+  id: string;
+  label: string;
+  items: ReadonlyArray<NavLink>;
+  isExpanded: boolean;
+  onToggle: (id: string) => void;
+  onNavigate: () => void;
+}) {
+  return (
+    <div className="border-b border-slate-100 last:border-b-0">
+      <button
+        type="button"
+        className={mobileAccordionTriggerClassName}
+        aria-expanded={isExpanded}
+        aria-controls={`mobile-accordion-${id}`}
+        onClick={() => onToggle(id)}
+      >
+        <span>{label}</span>
+        <ChevronDownIcon open={isExpanded} />
+      </button>
+
+      <div
+        id={`mobile-accordion-${id}`}
+        className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+          isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <ul className="space-y-0.5 px-1 pb-2 pt-1">
+            {items.map((item) => (
+              <li key={item.href + item.label}>
+                <a href={item.href} className={mobileSubLinkClassName} onClick={onNavigate}>
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileNavPopover({
+  visible,
+  expandedAccordion,
+  onToggleAccordion,
+  onClose,
+}: {
+  visible: boolean;
+  expandedAccordion: string | null;
+  onToggleAccordion: (id: string) => void;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      id="marketing-mobile-menu"
+      role="dialog"
+      aria-modal="false"
+      aria-label="Mobile navigation"
+      className={`${mobilePopoverShellClassName} transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+        visible
+          ? "pointer-events-auto scale-100 opacity-100"
+          : "pointer-events-none scale-95 opacity-0"
+      }`}
+    >
+      <div className={mobilePopoverCardClassName}>
+        <nav
+          className="max-h-[min(70dvh,28rem)] overflow-y-auto overscroll-contain px-2 py-2"
+          aria-label="Mobile"
+        >
+          {NAV_NODES.map((node) => {
+            if (node.type === "dropdown") {
+              return (
+                <MobileAccordionSection
+                  key={node.id}
+                  id={node.id}
+                  label={node.label}
+                  items={node.items}
+                  isExpanded={expandedAccordion === node.id}
+                  onToggle={onToggleAccordion}
+                  onNavigate={onClose}
+                />
+              );
+            }
+
+            return (
+              <div key={node.id} className="border-b border-slate-100 last:border-b-0">
+                <a href={node.href} className={mobileDirectLinkClassName} onClick={onClose}>
+                  {node.label}
+                </a>
+              </div>
+            );
+          })}
+        </nav>
+
+        <div className="space-y-1.5 border-t border-slate-100 px-2 py-2">
+          <Link
+            href="/login"
+            className="block w-full rounded-xl px-3 py-2.5 text-center text-sm font-semibold text-slate-800 transition-all duration-200 hover:bg-slate-50 hover:text-indigo-600 active:scale-[0.98]"
+            onClick={onClose}
+          >
+            Sign In
+          </Link>
+          <Link href="/signup" className={`${ctaClassName} w-full py-2.5 text-sm`} onClick={onClose}>
+            Get Started
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function NavDropdown({
@@ -236,25 +357,17 @@ function NavDropdown({
 }
 
 export function MarketingNav() {
-  const [isMounted, setIsMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [drawerMounted, setDrawerMounted] = useState(false);
-  const [drawerVisible, setDrawerVisible] = useState(false);
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+  const [popoverMounted, setPopoverMounted] = useState(false);
+  const [popoverVisible, setPopoverVisible] = useState(false);
+  const [expandedAccordion, setExpandedAccordion] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<DropdownId | null>(null);
+  const headerRef = useRef<HTMLElement | null>(null);
   const desktopNavRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-    setPortalTarget(document.body);
-  }, [isMounted]);
 
   const closeMobile = useCallback(() => {
     setMobileOpen(false);
+    setExpandedAccordion(null);
   }, []);
 
   const handleLogoClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -272,66 +385,55 @@ export function MarketingNav() {
     setOpenDropdown(null);
   }, []);
 
-  const openMobile = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement> | React.PointerEvent<HTMLButtonElement>) => {
-      normalizeMenuTap(event);
-      setMobileOpen(true);
-    },
-    [],
-  );
+  const toggleMobile = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    normalizeMenuTap(event);
+    setMobileOpen((current) => !current);
+  }, []);
 
-  const handleBackdropClose = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
-      closeMobile();
-    },
-    [closeMobile],
-  );
-
-  const handleDrawerClose = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      normalizeMenuTap(event);
-      closeMobile();
-    },
-    [closeMobile],
-  );
+  const toggleAccordion = useCallback((id: string) => {
+    setExpandedAccordion((current) => (current === id ? null : id));
+  }, []);
 
   useEffect(() => {
     if (!mobileOpen) {
-      setDrawerVisible(false);
+      setPopoverVisible(false);
       const timeout = window.setTimeout(() => {
-        setDrawerMounted(false);
-      }, DRAWER_TRANSITION_MS);
+        setPopoverMounted(false);
+      }, POPOVER_TRANSITION_MS);
       return () => window.clearTimeout(timeout);
     }
 
-    setDrawerMounted(true);
+    setPopoverMounted(true);
     const frame = requestAnimationFrame(() => {
-      requestAnimationFrame(() => setDrawerVisible(true));
+      requestAnimationFrame(() => setPopoverVisible(true));
     });
     return () => cancelAnimationFrame(frame);
   }, [mobileOpen]);
 
   useEffect(() => {
-    if (!isMounted || !drawerMounted) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [isMounted, drawerMounted]);
+    if (!mobileOpen) return;
+
+    function onPointerDown(event: PointerEvent) {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (headerRef.current?.contains(target)) return;
+      closeMobile();
+    }
+
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [mobileOpen, closeMobile]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setOpenDropdown(null);
-        if (drawerMounted) closeMobile();
+        if (popoverMounted) closeMobile();
       }
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [drawerMounted, closeMobile]);
+  }, [popoverMounted, closeMobile]);
 
   useEffect(() => {
     if (!openDropdown) return;
@@ -345,170 +447,76 @@ export function MarketingNav() {
     return () => document.removeEventListener("pointerdown", onPointerDown, { capture: true } as any);
   }, [openDropdown]);
 
-  const mobileDrawer =
-    isMounted && drawerMounted && portalTarget
-      ? createPortal(
-          <div className="fixed inset-0 z-40 h-dvh w-full lg:hidden" id="marketing-mobile-menu">
-            <button
-              type="button"
-              aria-label="Close menu"
-              tabIndex={drawerVisible ? 0 : -1}
-              className={`fixed inset-0 z-40 h-dvh w-full bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 ease-out touch-manipulation ${
-                drawerVisible
-                  ? "pointer-events-auto cursor-pointer opacity-100"
-                  : "pointer-events-none opacity-0"
-              }`}
-              onClick={handleBackdropClose}
-            />
-
-            <aside
-              role="dialog"
-              aria-modal="true"
-              aria-label="Mobile navigation"
-              className={`fixed top-0 right-0 z-50 flex h-dvh w-full max-w-sm flex-col overflow-hidden bg-white p-6 shadow-xl transition-transform duration-300 ease-out ${
-                drawerVisible ? "translate-x-0" : "translate-x-full pointer-events-none"
-              }`}
-            >
-              <div className="mb-8 flex shrink-0 items-center justify-between gap-4 border-b border-slate-100 pb-5">
-                <Link
-                  href="/"
-                  className="min-w-0 transition-all duration-200 active:scale-[0.98]"
-                  onClick={(event) => {
-                    handleLogoClick(event);
-                    closeMobile();
-                  }}
-                >
-                  <BrandMark />
-                </Link>
-                <button
-                  type="button"
-                  className={menuButtonClassName}
-                  aria-label="Close menu"
-                  onClick={handleDrawerClose}
-                >
-                  <CloseIcon />
-                </button>
-              </div>
-
-              <nav
-                className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain"
-                aria-label="Mobile"
-              >
-                {NAV_NODES.map((node) =>
-                  node.type === "dropdown" ? (
-                    <div key={node.id} className={mobileNavGroupClassName}>
-                      <p className={mobileNavGroupLabelClassName}>{node.label}</p>
-                      <ul className="mt-3 space-y-1 border-l-2 border-indigo-100 pl-3">
-                        {node.items.map((item) => (
-                          <li key={item.href + item.label}>
-                            <a
-                              href={item.href}
-                              className={mobileNavSubLinkClassName}
-                              onClick={closeMobile}
-                            >
-                              {item.label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : (
-                    <a
-                      key={node.id}
-                      href={node.href}
-                      className={mobileNavLinkClassName}
-                      onClick={closeMobile}
-                    >
-                      {node.label}
-                    </a>
-                  ),
-                )}
-              </nav>
-
-              <div className="mt-6 flex shrink-0 flex-col gap-3 border-t border-slate-100 pt-6">
-                <Link
-                  href="/login"
-                  className="rounded-xl px-4 py-3.5 text-center text-base font-bold tracking-tight text-slate-800 transition-all duration-200 hover:bg-slate-50 hover:text-indigo-600 active:scale-[0.98]"
-                  onClick={closeMobile}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className={ctaClassName + " w-full py-3.5 text-base"}
-                  onClick={closeMobile}
-                >
-                  Get Started
-                </Link>
-              </div>
-            </aside>
-          </div>,
-          portalTarget,
-        )
-      : null;
-
   return (
-    <>
-      <header className="sticky top-0 z-30 isolate border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="relative z-10 shrink-0 transition-all duration-200 active:scale-[0.98] pointer-events-auto"
-            onClick={handleLogoClick}
-          >
-            <BrandMark />
-          </Link>
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-30 isolate border-b border-slate-200/80 bg-white/95 backdrop-blur-md"
+    >
+      <div className="relative mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className="relative z-10 shrink-0 transition-all duration-200 active:scale-[0.98] pointer-events-auto"
+          onClick={handleLogoClick}
+        >
+          <BrandMark />
+        </Link>
 
-          <div
-            ref={desktopNavRef}
-            className="hidden flex-1 justify-center gap-x-2 lg:flex lg:gap-x-2"
-            aria-label="Primary"
-          >
-            {NAV_NODES.map((node) =>
-              node.type === "dropdown" ? (
-                <NavDropdown
-                  key={node.id}
-                  id={node.id}
-                  label={node.label}
-                  items={node.items}
-                  openDropdown={openDropdown}
-                  onToggle={toggleDropdownMenu}
-                  onSelect={closeDropdownMenu}
-                />
-              ) : (
-                <a key={node.id} href={node.href} className={linkClassName} onClick={closeDropdownMenu}>
-                  {node.label}
-                </a>
-              ),
-            )}
-          </div>
-
-          <div className="hidden shrink-0 items-center justify-end gap-x-4 lg:flex">
-            <Link href="/login" className={linkClassName}>
-              Sign In
-            </Link>
-            <Link href="/signup" className={ctaClassName}>
-              Get Started
-            </Link>
-          </div>
-
-          <div className="relative z-50 shrink-0 pointer-events-auto lg:hidden">
-            <button
-              type="button"
-              className={menuButtonClassName}
-              aria-expanded={mobileOpen}
-              aria-controls="marketing-mobile-menu"
-              aria-haspopup="dialog"
-              aria-label="Open menu"
-              onClick={openMobile}
-            >
-              <MenuIcon />
-            </button>
-          </div>
+        <div
+          ref={desktopNavRef}
+          className="hidden flex-1 justify-center gap-x-2 lg:flex lg:gap-x-2"
+          aria-label="Primary"
+        >
+          {NAV_NODES.map((node) =>
+            node.type === "dropdown" ? (
+              <NavDropdown
+                key={node.id}
+                id={node.id}
+                label={node.label}
+                items={node.items}
+                openDropdown={openDropdown}
+                onToggle={toggleDropdownMenu}
+                onSelect={closeDropdownMenu}
+              />
+            ) : (
+              <a key={node.id} href={node.href} className={linkClassName} onClick={closeDropdownMenu}>
+                {node.label}
+              </a>
+            ),
+          )}
         </div>
-      </header>
 
-      {mobileDrawer}
-    </>
+        <div className="hidden shrink-0 items-center justify-end gap-x-4 lg:flex">
+          <Link href="/login" className={linkClassName}>
+            Sign In
+          </Link>
+          <Link href="/signup" className={ctaClassName}>
+            Get Started
+          </Link>
+        </div>
+
+        <div className="relative z-50 ml-auto shrink-0 pointer-events-auto lg:hidden">
+          <button
+            type="button"
+            className={menuButtonClassName}
+            aria-expanded={mobileOpen}
+            aria-controls="marketing-mobile-menu"
+            aria-haspopup="true"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            onClick={toggleMobile}
+          >
+            {mobileOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
+
+        {popoverMounted ? (
+          <MobileNavPopover
+            visible={popoverVisible}
+            expandedAccordion={expandedAccordion}
+            onToggleAccordion={toggleAccordion}
+            onClose={closeMobile}
+          />
+        ) : null}
+      </div>
+    </header>
   );
 }
