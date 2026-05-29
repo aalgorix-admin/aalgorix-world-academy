@@ -7,6 +7,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 type NavLink = Readonly<{
   href: string;
   label: string;
+  description?: string;
+  tags?: ReadonlyArray<string>;
 }>;
 
 type NavNode =
@@ -29,9 +31,18 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     id: "academics",
     label: "Academics",
     items: [
-      { href: "#curricula-pathways", label: "Curricula Pathways" },
-      { href: "#how-it-works", label: "Learning Model" },
-      { href: "#published-courses", label: "Global Showroom" },
+      {
+        href: "#academy-benefits",
+        label: "Curriculum Coach",
+        description: "Accredited international tracks tailored to your pacing",
+        tags: ["NIOS Board", "Cambridge International"],
+      },
+      {
+        href: "#academy-benefits",
+        label: "Project-Based Learning",
+        description: "Hands-on, experiential academic tracks built for real-world mastery and portfolio development",
+        tags: ["Portfolio Building", "Real-World Tasks"],
+      },
     ],
   },
   {
@@ -39,9 +50,18 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     id: "extracurricular",
     label: "Extracurricular",
     items: [
-      { href: "#academy-benefits", label: "AI Cognitive Tutor" },
-      { href: "#how-it-works", label: "The Aalgorix Edge" },
-      { href: "#curricula-pathways", label: "Talent & Athlete Support" },
+      {
+        href: "#academy-benefits",
+        label: "Life Coach Support",
+        description: "Instilling critical discipline and executive function habits",
+        tags: ["Discipline", "Life Skills", "Confidence Mapping"],
+      },
+      {
+        href: "#academy-benefits",
+        label: "Talent Farming",
+        description: "Nurturing raw natural strengths and cultivating competitive portfolios",
+        tags: ["Music", "Cricket", "Gaming", "Portfolio Curation"],
+      },
     ],
   },
   {
@@ -106,6 +126,15 @@ const dropdownPanelCardClassName =
 
 const dropdownItemClassName =
   "block rounded-lg px-3 py-2 text-sm text-slate-600 transition-all duration-200 ease-out hover:bg-slate-50 hover:text-slate-900 active:scale-[0.98]";
+
+const dropdownRichItemClassName =
+  "block rounded-xl border border-slate-100 p-3 transition-all duration-300 ease-out hover:bg-slate-50 active:scale-[0.98]";
+
+const navTagBadgeClassName =
+  "rounded-md border border-indigo-100/20 bg-indigo-50 px-2 py-0.5 text-xs text-indigo-600";
+
+const mobileRichItemClassName =
+  "block rounded-xl border border-slate-200/70 bg-white px-3 py-3 transition-all duration-300 hover:bg-slate-50 active:scale-[0.98]";
 
 const ctaClassName =
   "inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-500 hover:to-violet-500 active:scale-[0.98]";
@@ -176,6 +205,84 @@ function normalizeMenuTap(event: React.MouseEvent<HTMLButtonElement>) {
   event.stopPropagation();
 }
 
+function NavTagBadge({ children }: { children: string }) {
+  return <span className={navTagBadgeClassName}>{children ?? ""}</span>;
+}
+
+function isRichNavLink(item: NavLink) {
+  return Boolean((item.description ?? "").length || (item.tags ?? []).length);
+}
+
+function DesktopNavDropdownItem({
+  item,
+  onSelect,
+}: {
+  item: NavLink;
+  onSelect: () => void;
+}) {
+  const href = item.href ?? "";
+  const label = item.label ?? "";
+  const description = item.description ?? "";
+  const tags = item.tags ?? [];
+
+  if (!isRichNavLink(item)) {
+    return (
+      <a href={href} className={dropdownItemClassName} role="menuitem" onClick={onSelect}>
+        {label}
+      </a>
+    );
+  }
+
+  return (
+    <a href={href} className={dropdownRichItemClassName} role="menuitem" onClick={onSelect}>
+      <div className="text-sm font-semibold text-slate-900">{label}</div>
+      {description ? <p className="mt-1 text-xs leading-relaxed text-slate-500">{description}</p> : null}
+      {tags.length > 0 ? (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {tags.map((tag) => (
+            <NavTagBadge key={tag ?? ""}>{tag ?? ""}</NavTagBadge>
+          ))}
+        </div>
+      ) : null}
+    </a>
+  );
+}
+
+function MobileNavDropdownItem({
+  item,
+  onNavigate,
+}: {
+  item: NavLink;
+  onNavigate: () => void;
+}) {
+  const href = item.href ?? "";
+  const label = item.label ?? "";
+  const description = item.description ?? "";
+  const tags = item.tags ?? [];
+
+  if (!isRichNavLink(item)) {
+    return (
+      <a href={href} className={mobileSubLinkClassName} onClick={onNavigate}>
+        {label}
+      </a>
+    );
+  }
+
+  return (
+    <a href={href} className={mobileRichItemClassName} onClick={onNavigate}>
+      <div className="text-sm font-semibold text-slate-900">{label}</div>
+      {description ? <p className="mt-1 text-sm text-slate-600">{description}</p> : null}
+      {tags.length > 0 ? (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {tags.map((tag) => (
+            <NavTagBadge key={tag ?? ""}>{tag ?? ""}</NavTagBadge>
+          ))}
+        </div>
+      ) : null}
+    </a>
+  );
+}
+
 function MobileAccordionSection({
   id,
   label,
@@ -211,12 +318,10 @@ function MobileAccordionSection({
         }`}
       >
         <div className="overflow-hidden">
-          <ul className="space-y-0.5 px-1 pb-2 pt-1">
+          <ul className="space-y-1.5 px-1 pb-2 pt-1">
             {items.map((item) => (
-              <li key={item.href + item.label}>
-                <a href={item.href} className={mobileSubLinkClassName} onClick={onNavigate}>
-                  {item.label}
-                </a>
+              <li key={(item.href ?? "") + (item.label ?? "")}>
+                <MobileNavDropdownItem item={item} onNavigate={onNavigate} />
               </li>
             ))}
           </ul>
@@ -335,18 +440,15 @@ function NavDropdown({
         role="menu"
         aria-hidden={!isOpen}
       >
-        <div className={dropdownPanelCardClassName}>
-          <ul className="space-y-1">
-            {items.map((item) => (
-              <li key={item.href + item.label} role="none">
-                <a
-                  href={item.href}
-                  className={dropdownItemClassName}
-                  role="menuitem"
-                  onClick={onSelect}
-                >
-                  {item.label}
-                </a>
+        <div
+          className={`${dropdownPanelCardClassName} ${
+            id === "extracurricular" ? "w-[22rem] p-3" : ""
+          }`}
+        >
+          <ul className={id === "extracurricular" ? "space-y-2" : "space-y-1"}>
+            {(items ?? []).map((item) => (
+              <li key={(item.href ?? "") + (item.label ?? "")} role="none">
+                <DesktopNavDropdownItem item={item} onSelect={onSelect} />
               </li>
             ))}
           </ul>
