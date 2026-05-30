@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { appUrl } from "@/lib/domains";
 import { MarketingNav } from "./marketing-nav";
 import { BrochureModalCta } from "./brochure-modal-cta";
 import { PublishedCoursesSection } from "./published-courses-section";
@@ -218,7 +219,7 @@ export default function MarketingPage() {
               We protect your child’s well-being while identifying their core strengths, cultivating vital communication skills, and farming their distinct talents for an automated tomorrow.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link href="/signup" className={btnPrimary}>
+                <Link href={appUrl("/signup")} className={btnPrimary}>
                   Enroll Your Child
                 </Link>
                 <BrochureModalCta className={btnGhost} />
@@ -456,7 +457,7 @@ export default function MarketingPage() {
                 Book a Free Consultation
               </Link>
               <Link
-                href="/login"
+                href={appUrl("/login")}
                 className="inline-flex rounded-xl border-2 border-white/40 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.98]"
               >
                 Sign In
@@ -531,7 +532,10 @@ export default function MarketingPage() {
                   </a>
                 </li>
                 <li>
-                  <Link href="/login" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
+                  <Link
+                    href={appUrl("/login")}
+                    className="transition-all duration-200 hover:text-white active:scale-[0.98]"
+                  >
                     Student &amp; Parent Login
                   </Link>
                 </li>
@@ -558,7 +562,10 @@ export default function MarketingPage() {
                   </a>
                 </li>
                 <li>
-                  <Link href="/signup" className="font-semibold text-indigo-300 transition-all duration-200 hover:text-white active:scale-[0.98]">
+                  <Link
+                    href={appUrl("/signup")}
+                    className="font-semibold text-indigo-300 transition-all duration-200 hover:text-white active:scale-[0.98]"
+                  >
                     Create Account →
                   </Link>
                 </li>

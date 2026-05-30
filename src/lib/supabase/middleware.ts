@@ -9,6 +9,13 @@ import {
   shouldRedirectSignedInUserFromAuthPath,
 } from "@/lib/auth/redirects";
 import { isUserRole, type UserRole } from "@/lib/auth/roles";
+import {
+  appUrl,
+  getRequestHost,
+  isAppHost,
+  isDualDomainMode,
+  withAuthCookieDomain,
+} from "@/lib/domains";
 import { getSupabaseAnonKey, getSupabaseUrl } from "@/lib/env";
 
 export async function updateSession(request: NextRequest) {
@@ -25,7 +32,11 @@ export async function updateSession(request: NextRequest) {
         });
         supabaseResponse = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) => {
-          supabaseResponse.cookies.set(name, value, options);
+          supabaseResponse.cookies.set(
+            name,
+            value,
+            withAuthCookieDomain(options ?? {}),
+          );
         });
       },
     },
@@ -36,7 +47,12 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
-  const loginUrl = new URL("/login", request.url);
+  const host = getRequestHost(request);
+  const onAppOrigin = isDualDomainMode() && isAppHost(host);
+  const loginUrl = new URL(
+    "/login",
+    onAppOrigin ? appUrl() : request.url,
+  );
 
   if (!user && isDashboardPath(pathname)) {
     loginUrl.searchParams.set("next", pathname);
@@ -52,6 +68,9 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (!user) {
+    if (onAppOrigin && pathname === "/") {
+      return NextResponse.redirect(loginUrl);
+    }
     return supabaseResponse;
   }
 
@@ -64,16 +83,23 @@ export async function updateSession(request: NextRequest) {
   const role: UserRole | null =
     profile?.role && isUserRole(profile.role) ? profile.role : null;
 
+  const redirectBase = onAppOrigin ? appUrl() : request.url;
+
+  if (onAppOrigin && pathname === "/") {
+    const destination = role ? getDashboardPathForRole(role) : "/login";
+    return NextResponse.redirect(new URL(destination, redirectBase));
+  }
+
   if (shouldRedirectSignedInUserFromAuthPath(pathname)) {
     const destination = role
       ? getDashboardPathForRole(role)
       : (request.nextUrl.searchParams.get("next") ?? "/");
-    return NextResponse.redirect(new URL(destination, request.url));
+    return NextResponse.redirect(new URL(destination, redirectBase));
   }
 
   if (role && isDashboardPath(pathname) && !pathnameMatchesRole(pathname, role)) {
     return NextResponse.redirect(
-      new URL(getDashboardPathForRole(role), request.url),
+      new URL(getDashboardPathForRole(role), redirectBase),
     );
   }
 

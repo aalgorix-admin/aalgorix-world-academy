@@ -1,8 +1,14 @@
 import { type NextRequest } from "next/server";
 
+import { resolveCrossDomainRedirect } from "@/lib/routing/host-routing";
 import { updateSession } from "@/lib/supabase/middleware";
 
 export async function proxy(request: NextRequest) {
+  const crossDomain = resolveCrossDomainRedirect(request);
+  if (crossDomain) {
+    return crossDomain;
+  }
+
   return updateSession(request);
 }
 

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { appUrl } from "@/lib/domains";
+
 type NavLink = Readonly<{
   href: string;
   label: string;
@@ -117,10 +119,11 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     label: "About Us",
     items: [
       { href: "#our-story", label: "Our Story & Philosophy" },
-      { href: "#admission-enquiries", label: "Admission Enquiries" },
+      { href: "/faq", label: "FAQ" },
+      { href: "/contact", label: "Admission Enquiries" },
       { href: "#careers", label: "Careers" },
       { href: "#blog", label: "Blog" },
-      { href: "#contact-support", label: "Contact Support" },
+      { href: "/contact", label: "Contact Us" },
     ],
   },
 ] as const;
@@ -452,13 +455,17 @@ function MobileNavPopover({
 
         <div className="space-y-1.5 border-t border-slate-100 px-2 py-2">
           <Link
-            href="/login"
+            href={appUrl("/login")}
             className="block w-full rounded-xl px-3 py-2.5 text-center text-sm font-semibold text-slate-800 transition-all duration-200 hover:bg-slate-50 hover:text-indigo-600 active:scale-[0.98]"
             onClick={onClose}
           >
             Sign In
           </Link>
-          <Link href="/signup" className={`${ctaClassName} w-full py-2.5 text-sm`} onClick={onClose}>
+          <Link
+            href={appUrl("/signup")}
+            className={`${ctaClassName} w-full py-2.5 text-sm`}
+            onClick={onClose}
+          >
             Get Started
           </Link>
         </div>
@@ -656,10 +663,10 @@ export function MarketingNav() {
         </div>
 
         <div className="hidden shrink-0 items-center justify-end gap-x-4 lg:flex">
-          <Link href="/login" className={linkClassName}>
+          <Link href={appUrl("/login")} className={linkClassName}>
             Sign In
           </Link>
-          <Link href="/signup" className={ctaClassName}>
+          <Link href={appUrl("/signup")} className={ctaClassName}>
             Get Started
           </Link>
         </div>

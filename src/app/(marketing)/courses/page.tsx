@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { fetchPublishedCourses } from "@/lib/curriculum/public-catalog";
+import { appUrl } from "@/lib/domains";
 
 import { MarketingNav } from "../marketing-nav";
 import { PublicCourseCard } from "./course-card";
@@ -55,7 +56,7 @@ export default async function PublicCoursesPage() {
               <p className="text-slate-600">
                 No published courses yet. Check back soon or book a consultation.
               </p>
-              <Link href="/signup" className={`${btnPrimary} mt-6`}>
+              <Link href={appUrl("/signup")} className={`${btnPrimary} mt-6`}>
                 Create an account
               </Link>
             </div>

@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
+import { withAuthCookieDomain } from "@/lib/domains";
 import { getSupabaseAnonKey, getSupabaseUrl } from "@/lib/env";
 
 export async function createClient() {
@@ -14,7 +15,7 @@ export async function createClient() {
       setAll(cookiesToSet) {
         try {
           cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options);
+            cookieStore.set(name, value, withAuthCookieDomain(options ?? {}));
           });
         } catch {
           // Called from a Server Component without mutable cookies; middleware

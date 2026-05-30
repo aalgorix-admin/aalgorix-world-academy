@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { marketingUrl } from "@/lib/domains";
+
 type AuthShellProps = {
   title: string;
   subtitle: string;
@@ -23,7 +25,7 @@ export function AuthShell({ title, subtitle, children, footer }: AuthShellProps)
       <div className="relative mx-auto w-full max-w-md">
         <div className="mb-8 text-center">
           <Link
-            href="/"
+            href={marketingUrl("/")}
             className="inline-flex items-center gap-2 text-sm font-medium text-indigo-200/90 transition hover:text-white"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/20 text-base font-bold text-indigo-100 ring-1 ring-indigo-400/30">
