@@ -9,6 +9,7 @@ type NavLink = Readonly<{
   label: string;
   description?: string;
   tags?: ReadonlyArray<string>;
+  isExternal?: boolean;
 }>;
 
 type NavNode =
@@ -31,6 +32,18 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     id: "academics",
     label: "Academics",
     items: [
+      {
+        href: "#life-journey",
+        label: "Life Journey: How do we teach?",
+        description: "Explore our student-centric pedagogical model and everyday learning workflows",
+        tags: ["Our Method", "Learning Flow"],
+      },
+      {
+        href: "#accreditation",
+        label: "Accreditation",
+        description: "Fully verified global certifications ensuring seamless university recognition",
+        tags: ["Global Validity", "Certifications"],
+      },
       {
         href: "#academy-benefits",
         label: "Curriculum Coach",
@@ -65,10 +78,24 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     ],
   },
   {
-    type: "link",
-    id: "ai-tutor",
-    label: "AI Tutor",
-    href: "#ai-tutor",
+    type: "dropdown",
+    id: "our-tech",
+    label: "Our Tech",
+    items: [
+      {
+        href: "#ai-tutor",
+        label: "AI Tutor",
+        description: "Your personalized 24/7 contextual study companion sandbox",
+        tags: ["Avatar Based Study", "Instant Answers", "Interactive Study"],
+      },
+      {
+        href: "https://aimasterji.professorsai.org/",
+        label: "AI Toy",
+        description: "Advanced cognitive training terminal and mentor network link",
+        tags: ["Child's Companion", "AI Mentor"],
+        isExternal: true,
+      },
+    ],
   },
   {
     type: "dropdown",
@@ -78,6 +105,10 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
       { href: "#parent-faq-vault", label: "Parent FAQ Vault" },
       { href: "#global-family-community", label: "Global Family Community" },
       { href: "#accountability-handbook", label: "Accountability Handbook" },
+      {
+        href: "#sessions",
+        label: "Sessions: When started?",
+      },
     ],
   },
   {
@@ -119,16 +150,25 @@ const linkClassName =
 const dropdownTriggerClassName =
   "inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-all duration-200 ease-out hover:bg-slate-100 hover:text-slate-900 active:scale-[0.98]";
 
-const dropdownPanelWrapperClassName = "absolute top-full left-0 pt-2";
+const dropdownPanelWrapperClassName = "absolute top-full left-0 z-50 pt-2";
+
+const dropdownPanelWrapperMegaClassName =
+  "absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2";
 
 const dropdownPanelCardClassName =
   "w-64 rounded-xl border border-slate-200 bg-white p-4 shadow-xl transition-all duration-200 ease-out";
+
+const dropdownMegaPanelCardClassName =
+  "w-[min(calc(100vw-2rem),44rem)] rounded-xl border border-slate-200 bg-white p-3 shadow-xl transition-all duration-200 ease-out";
+
+const dropdownCompactMegaPanelClassName =
+  "w-[min(calc(100vw-2rem),34rem)] rounded-xl border border-slate-200 bg-white p-3 shadow-xl transition-all duration-200 ease-out";
 
 const dropdownItemClassName =
   "block rounded-lg px-3 py-2 text-sm text-slate-600 transition-all duration-200 ease-out hover:bg-slate-50 hover:text-slate-900 active:scale-[0.98]";
 
 const dropdownRichItemClassName =
-  "block rounded-xl border border-slate-100 p-3 transition-all duration-300 ease-out hover:bg-slate-50 active:scale-[0.98]";
+  "block h-full rounded-xl border border-slate-100 p-3 transition-all duration-300 ease-out hover:bg-slate-50 active:scale-[0.98]";
 
 const navTagBadgeClassName =
   "rounded-md border border-indigo-100/20 bg-indigo-50 px-2 py-0.5 text-xs text-indigo-600";
@@ -213,6 +253,30 @@ function isRichNavLink(item: NavLink) {
   return Boolean((item.description ?? "").length || (item.tags ?? []).length);
 }
 
+function dropdownUsesMegaLayout(items: ReadonlyArray<NavLink>) {
+  return (items ?? []).some(isRichNavLink);
+}
+
+function getDesktopDropdownPanelClassName(items: ReadonlyArray<NavLink>) {
+  const safeItems = items ?? [];
+  if (!dropdownUsesMegaLayout(safeItems)) {
+    return dropdownPanelCardClassName;
+  }
+
+  return safeItems.length >= 4 ? dropdownMegaPanelCardClassName : dropdownCompactMegaPanelClassName;
+}
+
+function getDesktopDropdownListClassName(items: ReadonlyArray<NavLink>) {
+  const safeItems = items ?? [];
+  if (!dropdownUsesMegaLayout(safeItems)) {
+    return "space-y-1";
+  }
+
+  return safeItems.length >= 3
+    ? "grid grid-cols-1 gap-2 lg:grid-cols-2"
+    : "grid grid-cols-1 gap-2 sm:grid-cols-2";
+}
+
 function DesktopNavDropdownItem({
   item,
   onSelect,
@@ -236,7 +300,9 @@ function DesktopNavDropdownItem({
   return (
     <a href={href} className={dropdownRichItemClassName} role="menuitem" onClick={onSelect}>
       <div className="text-sm font-semibold text-slate-900">{label}</div>
-      {description ? <p className="mt-1 text-xs leading-relaxed text-slate-500">{description}</p> : null}
+      {description ? (
+        <p className="mt-1 text-xs leading-relaxed text-slate-500">{description}</p>
+      ) : null}
       {tags.length > 0 ? (
         <div className="mt-2 flex flex-wrap gap-1.5">
           {tags.map((tag) => (
@@ -417,10 +483,16 @@ function NavDropdown({
   onSelect: () => void;
 }) {
   const isOpen = openDropdown === id;
+  const safeItems = items ?? [];
+  const usesMegaLayout = dropdownUsesMegaLayout(safeItems);
 
   const visibleClassName = isOpen
     ? "opacity-100 pointer-events-auto translate-y-0"
     : "opacity-0 pointer-events-none -translate-y-1 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0";
+
+  const panelWrapperClassName = usesMegaLayout
+    ? dropdownPanelWrapperMegaClassName
+    : dropdownPanelWrapperClassName;
 
   return (
     <div className="relative group">
@@ -436,18 +508,14 @@ function NavDropdown({
       </button>
 
       <div
-        className={`${dropdownPanelWrapperClassName} ${visibleClassName} transition-all duration-200 ease-out`}
+        className={`${panelWrapperClassName} ${visibleClassName} transition-all duration-200 ease-out`}
         role="menu"
         aria-hidden={!isOpen}
       >
-        <div
-          className={`${dropdownPanelCardClassName} ${
-            id === "extracurricular" ? "w-[22rem] p-3" : ""
-          }`}
-        >
-          <ul className={id === "extracurricular" ? "space-y-2" : "space-y-1"}>
-            {(items ?? []).map((item) => (
-              <li key={(item.href ?? "") + (item.label ?? "")} role="none">
+        <div className={getDesktopDropdownPanelClassName(safeItems)}>
+          <ul className={getDesktopDropdownListClassName(safeItems)}>
+            {safeItems.map((item) => (
+              <li key={(item.href ?? "") + (item.label ?? "")} role="none" className="min-w-0">
                 <DesktopNavDropdownItem item={item} onSelect={onSelect} />
               </li>
             ))}
