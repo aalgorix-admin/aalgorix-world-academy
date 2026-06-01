@@ -6,7 +6,6 @@ import {
   fetchPublishedCourseBySlug,
   formatUnlockStrategy,
 } from "@/lib/curriculum/public-catalog";
-import { appUrl } from "@/lib/domains";
 
 import { MarketingNav } from "../../marketing-nav";
 
@@ -111,7 +110,7 @@ export default async function PublicCourseDetailPage({ params }: PageProps) {
               ) : null}
             </dl>
 
-            <Link href={appUrl("/signup")} className={`${btnPrimary} mt-8`}>
+            <Link href="/signup" className={`${btnPrimary} mt-8`}>
               Enroll via family account
             </Link>
           </div>

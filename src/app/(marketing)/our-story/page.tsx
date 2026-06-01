@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { appUrl } from "@/lib/domains";
 import { BrochureModalCta } from "../brochure-modal-cta";
 import { MarketingNav } from "../marketing-nav";
 
@@ -136,7 +135,7 @@ export default function OurStoryPage() {
                 global mobility, and a childhood that still feels like childhood.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                <Link href={appUrl("/signup")} className={btnPrimary}>
+                <Link href="/signup" className={btnPrimary}>
                   Start your child&apos;s journey
                 </Link>
                 <BrochureModalCta className={btnGhost} />

@@ -4,31 +4,54 @@ import {
 } from "@/lib/auth/redirects";
 
 /** Public marketing routes (served on the marketing origin in dual-domain mode). */
-const MARKETING_PREFIXES = ["/courses", "/contact", "/faq"] as const;
+const MARKETING_PREFIXES = ["/courses", "/contact", "/faq", "/our-story", "/blog"] as const;
 
 function stripTrailingSlash(url: string): string {
   return url.endsWith("/") ? url.slice(0, -1) : url;
 }
 
 /**
- * Canonical marketing site origin (www.aalgorixacademy.com in production).
+ * Prefer server-only env (runtime on deploy) over NEXT_PUBLIC_* (inlined at build).
+ * Do not use appUrl()/marketingUrl() in client components — use relative paths
+ * like /login and let the proxy redirect using these origins.
  */
-export function getMarketingOrigin(): string {
-  const fromEnv = process.env.NEXT_PUBLIC_MARKETING_URL?.trim();
-  if (fromEnv) {
-    return stripTrailingSlash(fromEnv);
+function readSiteOrigin(
+  serverKey: "MARKETING_SITE_URL" | "APP_SITE_URL",
+  publicKey: "NEXT_PUBLIC_MARKETING_URL" | "NEXT_PUBLIC_APP_URL",
+  fallback: string,
+): string {
+  const server = process.env[serverKey]?.trim();
+  if (server) {
+    return stripTrailingSlash(server);
   }
-  return "http://localhost:3000";
+  const fromPublic = process.env[publicKey]?.trim();
+  if (fromPublic) {
+    return stripTrailingSlash(fromPublic);
+  }
+  return fallback;
+}
+
+/** Canonical marketing site origin (www.aalgorixacademy.com in production). */
+export function getMarketingOrigin(): string {
+  return readSiteOrigin(
+    "MARKETING_SITE_URL",
+    "NEXT_PUBLIC_MARKETING_URL",
+    "http://localhost:3000",
+  );
 }
 
 /**
- * Authenticated app origin (www.awa.aalgorixacademy.com in production).
+ * Authenticated app origin (app.aalgorixacademy.com in production).
  * Falls back to marketing origin when unset (local monolith dev).
  */
 export function getAppOrigin(): string {
-  const fromEnv = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (fromEnv) {
-    return stripTrailingSlash(fromEnv);
+  const app = readSiteOrigin(
+    "APP_SITE_URL",
+    "NEXT_PUBLIC_APP_URL",
+    "",
+  );
+  if (app) {
+    return app;
   }
   return getMarketingOrigin();
 }

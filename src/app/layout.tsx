@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Aalgorix World Academy",
   description: "Premium online learning inspired by world-class EdTech",
+  icons: {
+    icon: [{ url: "/brand/awa.svg", type: "image/svg+xml" }],
+    shortcut: "/brand/awa.svg",
+  },
 };
 
 export default function RootLayout({

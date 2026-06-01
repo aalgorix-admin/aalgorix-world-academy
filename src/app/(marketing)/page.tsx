@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { appUrl } from "@/lib/domains";
 import { MarketingNav } from "./marketing-nav";
 import { BrochureModalCta } from "./brochure-modal-cta";
 import { PublishedCoursesSection } from "./published-courses-section";
@@ -219,7 +218,7 @@ export default function MarketingPage() {
               We protect your child’s well-being while identifying their core strengths, cultivating vital communication skills, and farming their distinct talents for an automated tomorrow.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link href={appUrl("/signup")} className={btnPrimary}>
+                <Link href="/signup" className={btnPrimary}>
                   Enroll Your Child
                 </Link>
                 <BrochureModalCta className={btnGhost} />
@@ -402,7 +401,7 @@ export default function MarketingPage() {
                 Book a Free Consultation
               </Link>
               <Link
-                href={appUrl("/login")}
+                href="/login"
                 className="inline-flex rounded-xl border-2 border-white/40 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.98]"
               >
                 Sign In
@@ -415,116 +414,6 @@ export default function MarketingPage() {
           </div>
         </section>
       </main>
-
-      {/* 8. Footer */}
-      <footer className="bg-slate-950 text-slate-300">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="lg:col-span-1">
-              <p className="text-lg font-extrabold tracking-tight text-white">
-                AALGORIX WORLD ACADEMY
-              </p>
-              <p className="mt-4 text-sm leading-relaxed text-slate-400">
-                Premium accredited online schooling for global families, homeschoolers, and
-                student-athletes pursuing international university admissions.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
-                Curricula
-              </h3>
-              <ul className="mt-4 space-y-2 text-sm">
-                <li>
-                  <a href="#curricula-pathways" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    British International
-                  </a>
-                </li>
-                <li>
-                  <a href="#curricula-pathways" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    CAPS / SACAI
-                  </a>
-                </li>
-                <li>
-                  <a href="#curricula-pathways" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    IEB Pathway
-                  </a>
-                </li>
-                <li>
-                  <a href="#curricula-pathways" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    American NCAA Stream
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
-                Platform
-              </h3>
-              <ul className="mt-4 space-y-2 text-sm">
-                <li>
-                  <a href="#how-it-works" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    How It Works
-                  </a>
-                </li>
-                <li>
-                  <a href="#academy-benefits" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    Academy Benefits
-                  </a>
-                </li>
-                <li>
-                  <a href="#pricing" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <Link
-                    href={appUrl("/login")}
-                    className="transition-all duration-200 hover:text-white active:scale-[0.98]"
-                  >
-                    Student &amp; Parent Login
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
-                Resources
-              </h3>
-              <ul className="mt-4 space-y-2 text-sm">
-                <li>
-                  <a href="#how-it-works" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    Admissions Guide
-                  </a>
-                </li>
-                <li>
-                  <a href="#curricula-pathways" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    University Tracker
-                  </a>
-                </li>
-                <li>
-                  <a href="#academy-benefits" className="transition-all duration-200 hover:text-white active:scale-[0.98]">
-                    Parent Handbook
-                  </a>
-                </li>
-                <li>
-                  <Link
-                    href={appUrl("/signup")}
-                    className="font-semibold text-indigo-300 transition-all duration-200 hover:text-white active:scale-[0.98]"
-                  >
-                    Create Account →
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-8 text-xs text-slate-500 sm:flex-row">
-            <p>© {new Date().getFullYear()} Aalgorix World Academy. All rights reserved.</p>
-            <p className="text-center sm:text-right">
-              Inspired by CambriLearn workflows · Privacy · Terms
-            </p>
-          </div>
-        </div>
-      </footer>
     </>
   );
 }

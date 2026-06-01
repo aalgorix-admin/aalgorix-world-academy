@@ -2,8 +2,19 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  // Local dual-domain dev (NEXT_PUBLIC_APP_URL=http://app.localhost:3000)
   allowedDevOrigins: ["app.localhost"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.ctfassets.net",
+      },
+      {
+        protocol: "https",
+        hostname: "downloads.ctfassets.net",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
