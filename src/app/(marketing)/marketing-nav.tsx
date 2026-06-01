@@ -118,7 +118,13 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     id: "about-us",
     label: "About Us",
     items: [
-      { href: "#our-story", label: "Our Story & Philosophy" },
+      {
+        href: "/our-story",
+        label: "Our Story & Philosophy",
+        description:
+          "Why we built a holistic online school for global families—and how we teach",
+        tags: ["Mission", "Pedagogy"],
+      },
       { href: "/faq", label: "FAQ" },
       { href: "/contact", label: "Admission Enquiries" },
       { href: "#careers", label: "Careers" },

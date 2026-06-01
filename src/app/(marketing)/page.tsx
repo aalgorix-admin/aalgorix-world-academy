@@ -204,7 +204,7 @@ export default function MarketingPage() {
             className="pointer-events-none absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-indigo-200/30 blur-3xl"
           />
 
-          <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8 lg:py-16">
+          <div className="relative mx-auto grid max-w-7xl gap-4 px-4 pb-6 pt-12 sm:gap-12 sm:px-6 sm:pb-12 sm:pt-12 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8 lg:py-16">
             <div>
               <p className="mb-4 inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-indigo-800">
               Prepare your child for an Algorithmic Tomorrow
@@ -229,79 +229,24 @@ export default function MarketingPage() {
               </p>
             </div>
 
-            {/* Platform mockup */}
-            <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-3 shadow-2xl shadow-slate-300/40 ring-1 ring-slate-100">
-                <div className="mb-3 flex items-center gap-2 border-b border-slate-100 pb-3">
-                  <span className="h-3 w-3 rounded-full bg-rose-400" />
-                  <span className="h-3 w-3 rounded-full bg-amber-400" />
-                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
-                  <span className="ml-2 text-xs font-medium text-slate-400">
-                    Aalgorix Cockpit Terminal v1.4
-                  </span>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-5">
-                  <div className="space-y-3 sm:col-span-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-indigo-950">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 ring-2 ring-white/40 backdrop-blur">
-                          <svg viewBox="0 0 24 24" className="ml-1 h-5 w-5 text-white" fill="currentColor">
-                            <path d="M8 5v14l11-7L8 5z" />
-                          </svg>
-                        </span>
-                      </div>
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-3 py-2">
-                        <p className="text-xs font-medium text-white">
-                          Live Broadcast Masterclass — Advanced Analytical Mathematics
-                        </p>
-                      </div>
-                    </div>
-                    <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-                      <p className="text-xs font-semibold text-slate-700">Week Timeline</p>
-                      <div className="mt-2 flex gap-1">
-                        {["Mon", "Tue", "Wed", "Thu", "Fri"].map((day, i) => (
-                          <div
-                            key={day}
-                            className={`flex-1 rounded-md py-2 text-center text-[10px] font-medium ${
-                              i === 2
-                                ? "bg-indigo-600 text-white"
-                                : "bg-white text-slate-500 ring-1 ring-slate-200"
-                            }`}
-                          >
-                            {day}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-3 sm:col-span-2">
-                    <div className="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-800">
-                        Grade Analytics
-                      </p>
-                      <p className="mt-1 text-2xl font-bold text-slate-900">87%</p>
-                      <p className="text-xs text-slate-500">Term average</p>
-                      <div className="mt-2 h-2 overflow-hidden rounded-full bg-emerald-100">
-                        <div className="h-full w-[87%] rounded-full bg-gradient-to-r from-emerald-500 to-teal-500" />
-                      </div>
-                    </div>
-                    <div className="rounded-xl border border-indigo-100 bg-indigo-50/80 p-3">
-                      <p className="text-xs font-semibold text-indigo-900">Assignments</p>
-                      <ul className="mt-2 space-y-1.5 text-[11px] text-slate-600">
-                        <li className="flex justify-between">
-                          <span>Assignment 4: Complex Vectors &amp; Matrices</span>
-                          <span className="font-medium text-amber-700">Due Fri</span>
-                        </li>
-                        <li className="flex justify-between">
-                          <span>Problem Set — Physics</span>
-                          <span className="font-medium text-emerald-700">Marked</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="rounded-xl border border-violet-100 bg-violet-50/60 p-2 text-center text-[10px] font-medium text-violet-800">
-                      Parent view synced
-                    </div>
-                  </div>
+            {/* Hero video — full-bleed on mobile, tight vertical spacing */}
+            <div className="relative -mx-4 w-[calc(100%+2rem)] sm:mx-auto sm:w-full sm:max-w-xl lg:mx-0 lg:max-w-none">
+              <div className="rounded-xl border border-indigo-200/90 bg-gradient-to-br from-indigo-50 via-violet-50/90 to-white p-1 shadow-2xl shadow-indigo-500/25 ring-1 ring-violet-100 sm:rounded-2xl sm:p-3">
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-violet-200/80 bg-slate-900 ring-1 ring-indigo-100/60 sm:bg-indigo-50/50 lg:aspect-[16/11] lg:min-h-[28rem]">
+                  <video
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover lg:object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    disablePictureInPicture
+                    controlsList="nodownload noplaybackrate nofullscreen noremoteplayback"
+                    preload="auto"
+                    aria-hidden
+                    tabIndex={-1}
+                  >
+                    <source src="/videos/awa-hero-video.mp4" type="video/mp4" />
+                  </video>
                 </div>
               </div>
             </div>
