@@ -184,7 +184,7 @@ The primary public-facing presentation layer is **fully implemented and live** a
 | Deliverable | Status | Operational files |
 |-------------|--------|-------------------|
 | **Public marketing layout shell** | ✅ Complete | `src/app/(marketing)/layout.tsx` — light-theme wrapper, route-level metadata |
-| **CambriLearn-formula landing page** | ✅ Complete | `src/app/(marketing)/page.tsx` — announcement bar, hero, social proof, curricula grid, onboarding pipeline, benefits, pricing band, footer (Server Component) |
+| **CambriLearn-formula landing page** | ✅ Complete | `src/app/(marketing)/page.tsx` — announcement bar, hero, social proof, Curriculum grid, onboarding pipeline, benefits, pricing band, footer (Server Component) |
 | **Sticky navigation & mobile drawer** | ✅ Complete | `src/app/(marketing)/marketing-nav.tsx` — optimized client boundary: portal-based drawer, `h-dvh` viewport alignment, hydration mount guard, touch-hardened open handlers |
 
 **Surface coverage (verified):**
@@ -193,7 +193,7 @@ The primary public-facing presentation layer is **fully implemented and live** a
 - [x] Sticky desktop/mobile navigation with `/login` and `/signup` CTAs
 - [x] Split-column conversion hero with Tailwind-built platform mockup
 - [x] Four-column social proof metrics strip
-- [x] Curricula pathways selector grid (four flagship tracks)
+- [x] Curriculum pathways selector grid (four flagship tracks)
 - [x] Four-step “How Online School Works” pipeline
 - [x] Academy benefits / SLA feature grid
 - [x] Pricing presentation band (pre-Stripe placeholder tiers)
