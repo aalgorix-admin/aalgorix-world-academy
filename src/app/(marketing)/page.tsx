@@ -120,24 +120,24 @@ const FEATURES = [
 
 const PROOF_STATS = [
   {
+    value: "2x",
+    label: "Learning Outcomes",
+    detail: "Harward University recently released a report suggesting 2x learning growth by AI Tutor.",
+  },
+  {
     value: "98%",
-    label: "Ivy League & Oxbridge Acceptance",
-    detail: "Graduates accepted at Oxford, Cambridge, Harvard, and Stanford.",
+    label: "Student Satisfaction",
+    detail: "98% of students report a positive learning experience with our AI Tutor.",
   },
   {
     value: "100%",
-    label: "NCAA & Matrix Compliant",
-    detail: "Fully certified curriculum pathways for global student-athletes.",
+    label: "Global Student-Athlete Support",
+    detail: "We support global student-athletes with our fully certified curriculum pathways.",
   },
   {
     value: "24/7",
     label: "Global Learner Support",
     detail: "On-demand academic mentorship across international time zones.",
-  },
-  {
-    value: "8-Days",
-    label: "Guaranteed Assignment Turnaround",
-    detail: "Expert teacher-marked papers with comprehensive analytical feedback loops.",
   },
 ] as const;
 
@@ -174,18 +174,57 @@ const PRICING_TIERS = [
 export default function MarketingPage() {
   return (
     <>
-      {/* 1. Top announcement bar */}
-      <div className="bg-gradient-to-r from-indigo-700 via-violet-700 to-indigo-800 px-4 py-2.5 text-center text-xs font-medium tracking-wide text-white sm:text-sm">
-        <p>
-          ⚡ Enrolling for the 2026 Academic Term: Secure Your Child&apos;s Global Placement
-          Passport Today |{" "}
-          <Link
-            href="#how-it-works"
-            className="mt-1 inline-block underline decoration-white/40 underline-offset-2 transition-all duration-200 hover:decoration-white active:scale-[0.98] sm:mt-0 sm:inline"
-          >
-            Book a free consultation →
-          </Link>
-        </p>
+      {/* 1. Top announcement bar (Full width background color stays intact) */}
+      <div className="w-full bg-gradient-to-r from-indigo-700 via-violet-700 to-indigo-800 text-white">
+        {/* Inner Content Boundary: Keeps items boxed to the exact same width limits as a standard Navbar */}
+        <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 py-2 sm:flex-row sm:items-center sm:px-6 sm:py-0 lg:px-8 sm:h-10">
+          {/* Left Text */}
+          <p className="m-0 min-w-0 flex-1 text-left text-[11px] font-medium leading-snug tracking-wide sm:text-sm sm:leading-none">
+            ⚡ Enrolling for the 2026 Academic Term: Secure Your Global Road to Success Today |{" "}
+            <Link
+              href="/contact"
+              className="inline underline decoration-white/40 underline-offset-2 transition-all duration-200 hover:decoration-white active:scale-[0.98]"
+            >
+              Book a free consultation →
+            </Link>
+          </p>
+
+          {/* Actions (below text on mobile, right-aligned on sm+) */}
+          <div className="flex w-full flex-wrap items-center gap-1.5 text-[10px] sm:w-auto sm:justify-end sm:text-[11px]">
+            <Link
+              href="/contact"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 py-0.5 rounded border border-white/10 transition-all font-medium"
+            >
+              Enroll Now
+            </Link>
+            <Link
+              href="/faq"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 py-0.5 rounded border border-white/10 transition-all font-medium"
+            >
+              FAQ
+            </Link>
+            <Link
+              href="/blog"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 py-0.5 rounded border border-white/10 transition-all font-medium"
+            >
+              Blog
+            </Link>
+            <a
+              href="https://wa.me/+919167495565"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-0.5 rounded font-semibold transition-all"
+            >
+              WhatsApp
+            </a>
+            <Link
+              href="/donate"
+              className="bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 rounded font-semibold transition-all"
+            >
+              Donate Now
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* 2. Sticky navigation */}
@@ -221,10 +260,13 @@ export default function MarketingPage() {
                 <Link href="/signup" className={btnPrimary}>
                   Enroll Your Child
                 </Link>
+                <Link href="/ai-tutor" className={btnGhost}>
+                  Try AI Tutor
+                </Link>
                 <BrochureModalCta className={btnGhost} />
               </div>
               <p className="mt-6 text-sm text-slate-500">
-                7-day trial available · No credit card required to consult
+                Grab your Free Trial Session Today.
               </p>
             </div>
 
@@ -270,7 +312,7 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        {/* 5. Curricula pathways */}
+        {/* 5. Curriculumpathways */}
         <section
           id="curricula-pathways"
           className="scroll-mt-20 bg-white py-18 sm:py-20"
@@ -278,7 +320,7 @@ export default function MarketingPage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-                Curricula Pathways
+                Curriculum Pathways
               </h2>
               <p className="mt-4 text-lg text-slate-600">
                 Four flagship tracks within the AWA ecosystem—each with specialist teachers,

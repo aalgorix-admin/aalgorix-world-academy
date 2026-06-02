@@ -461,7 +461,7 @@ export default async function StudentHomePage() {
                   No active enrollments yet
                 </p>
                 <p className="mt-2 text-sm text-slate-600">
-                  Explore published curricula while your administrator completes
+                  Explore published Curriculumwhile your administrator completes
                   enrollment.
                 </p>
                 <Link

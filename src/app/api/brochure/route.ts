@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         <div style="margin-top: 18px; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
           <p style="margin: 0 0 10px; font-weight: 700;">Syllabus & Academy Overview</p>
           <ul style="margin: 0; padding-left: 18px;">
-            <li>Six accredited curricula pathways aligned for global university placement.</li>
+            <li>Six accredited Curriculum pathways aligned for global university placement.</li>
             <li>Live specialist masterclasses with structured weekly pacing and recordings.</li>
             <li>Verified mentor mapping and parent accountability dashboards.</li>
             <li>Teacher-marked assessments with disciplined turnaround SLAs.</li>

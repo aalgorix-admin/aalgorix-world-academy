@@ -39,10 +39,10 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
         tags: ["Our Method", "Learning Flow"],
       },
       {
-        href: "#accreditation",
-        label: "Accreditation",
-        description: "Fully verified global certifications ensuring seamless university recognition",
-        tags: ["Global Validity", "Certifications"],
+        href: "#academy-benefits",
+        label: "Project-Based Learning",
+        description: "Hands-on, experiential academic tracks built for real-world mastery and portfolio development",
+        tags: ["Portfolio Building", "Real-World Tasks"],
       },
       {
         href: "#academy-benefits",
@@ -51,10 +51,10 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
         tags: ["NIOS Board", "Cambridge International"],
       },
       {
-        href: "#academy-benefits",
-        label: "Project-Based Learning",
-        description: "Hands-on, experiential academic tracks built for real-world mastery and portfolio development",
-        tags: ["Portfolio Building", "Real-World Tasks"],
+        href: "#inclusive-learning",
+        label: "Inclusive Learning",
+        description: "Dedicated homeschooling programs tailored for children with special needs.",
+        tags: ["Special Needs", "Homeschooling"],
       },
     ],
   },
@@ -71,7 +71,7 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
       },
       {
         href: "#academy-benefits",
-        label: "Talent Farming",
+        label: "Talent Support",
         description: "Nurturing raw natural strengths and cultivating competitive portfolios",
         tags: ["Music", "Cricket", "Gaming", "Portfolio Curation"],
       },
@@ -83,7 +83,7 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     label: "Our Tech",
     items: [
       {
-        href: "#ai-tutor",
+        href: "/ai-tutor",
         label: "AI Tutor",
         description: "Your personalized 24/7 contextual study companion sandbox",
         tags: ["Avatar Based Study", "Instant Answers", "Interactive Study"],
@@ -113,14 +113,15 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
   },
   {
     type: "dropdown",
-    id: "about-us",
-    label: "About Us",
+    id: "why-us",
+    label: "Why Us",
     items: [
-      { href: "/our-story", label: "Our Story & Philosophy" },
+      { href: "/why-us", label: "Why Us?" },
+      { href: "/our-story", label: "Our Story" },
       { href: "/faq", label: "FAQ" },
-      { href: "/contact", label: "Admission Enquiries" },
-      { href: "#careers", label: "Careers" },
+      { href: "/contact", label: "Admission" },
       { href: "/blog", label: "Blog" },
+      { href: "/careers", label: "Join Us" },
       { href: "/contact", label: "Contact Us" },
     ],
   },
@@ -131,7 +132,7 @@ type DropdownId = Extract<NavNode, { type: "dropdown" }>["id"];
 const POPOVER_TRANSITION_MS = 300;
 
 const mobilePopoverShellClassName =
-  "absolute top-18 right-4 z-50 w-72 origin-top-right md:w-80 lg:hidden";
+  "absolute top-full left-4 right-4 z-50 mt-2 w-auto origin-top lg:hidden sm:left-auto sm:right-4 sm:w-80";
 
 const mobilePopoverCardClassName =
   "overflow-hidden rounded-2xl border border-slate-200/20 bg-white/90 shadow-2xl backdrop-blur-xl";

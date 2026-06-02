@@ -92,7 +92,7 @@ const TEACHING_MODEL = [
 ] as const;
 
 const COMMITMENTS = [
-  "Internationally recognised curricula with transparent accreditation guidance",
+  "Internationally recognised Curriculum with transparent accreditation guidance",
   "Small-batch live instruction with recordings for revision and travel",
   "Teacher-marked assessments with written feedback—not automated guessing",
   "Parent dashboards that make accountability calm, not confrontational",

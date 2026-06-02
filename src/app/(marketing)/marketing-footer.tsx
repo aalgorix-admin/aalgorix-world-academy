@@ -73,6 +73,16 @@ export function MarketingFooter() {
             <h3 className="text-sm font-bold uppercase tracking-wider text-white">Resources</h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
+                <Link href="/why-us" className={footerLinkClass}>
+                  Why Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/ai-tutor" className={footerLinkClass}>
+                  AI Tutor
+                </Link>
+              </li>
+              <li>
                 <Link href="/our-story" className={footerLinkClass}>
                   Our Story &amp; Philosophy
                 </Link>
