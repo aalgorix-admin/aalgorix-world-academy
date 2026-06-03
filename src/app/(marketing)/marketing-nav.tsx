@@ -17,6 +17,7 @@ type NavNode =
       type: "dropdown";
       id: string;
       label: string;
+      overviewHref?: string;
       items: ReadonlyArray<NavLink>;
     }>
   | Readonly<{
@@ -31,27 +32,28 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     type: "dropdown",
     id: "academics",
     label: "Academics",
+    overviewHref: "/academics",
     items: [
       {
-        href: "#life-journey",
+        href: "/academics#life-journey",
         label: "Life Journey: How do we teach?",
         description: "Explore our student-centric pedagogical model and everyday learning workflows",
         tags: ["Our Method", "Learning Flow"],
       },
       {
-        href: "#academy-benefits",
+        href: "/academics#project-based-learning",
         label: "Project-Based Learning",
         description: "Hands-on, experiential academic tracks built for real-world mastery and portfolio development",
         tags: ["Portfolio Building", "Real-World Tasks"],
       },
       {
-        href: "#academy-benefits",
+        href: "/academics#curriculum-coach",
         label: "Curriculum Coach",
         description: "Accredited international tracks tailored to your pacing",
         tags: ["NIOS Board", "Cambridge International"],
       },
       {
-        href: "#inclusive-learning",
+        href: "/academics#inclusive-learning",
         label: "Inclusive Learning",
         description: "Dedicated homeschooling programs tailored for children with special needs.",
         tags: ["Special Needs", "Homeschooling"],
@@ -62,15 +64,16 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
     type: "dropdown",
     id: "extracurricular",
     label: "Extracurricular",
+    overviewHref: "/extracurricular",
     items: [
       {
-        href: "#academy-benefits",
+        href: "/extracurricular#life-coach-support",
         label: "Life Coach Support",
         description: "Instilling critical discipline and executive function habits",
         tags: ["Discipline", "Life Skills", "Confidence Mapping"],
       },
       {
-        href: "#academy-benefits",
+        href: "/extracurricular#talent-support",
         label: "Talent Support",
         description: "Nurturing raw natural strengths and cultivating competitive portfolios",
         tags: ["Music", "Cricket", "Gaming", "Portfolio Curation"],
@@ -354,6 +357,7 @@ function MobileNavDropdownItem({
 function MobileAccordionSection({
   id,
   label,
+  overviewHref,
   items,
   isExpanded,
   onToggle,
@@ -361,6 +365,7 @@ function MobileAccordionSection({
 }: {
   id: string;
   label: string;
+  overviewHref?: string;
   items: ReadonlyArray<NavLink>;
   isExpanded: boolean;
   onToggle: (id: string) => void;
@@ -368,16 +373,37 @@ function MobileAccordionSection({
 }) {
   return (
     <div className="border-b border-slate-100 last:border-b-0">
-      <button
-        type="button"
-        className={mobileAccordionTriggerClassName}
-        aria-expanded={isExpanded}
-        aria-controls={`mobile-accordion-${id}`}
-        onClick={() => onToggle(id)}
-      >
-        <span>{label}</span>
-        <ChevronDownIcon open={isExpanded} />
-      </button>
+      <div className="flex items-center gap-1">
+        {overviewHref ? (
+          <Link
+            href={overviewHref}
+            className={`${mobileAccordionTriggerClassName} flex-1`}
+            onClick={onNavigate}
+          >
+            <span>{label}</span>
+          </Link>
+        ) : (
+          <button
+            type="button"
+            className={`${mobileAccordionTriggerClassName} flex-1`}
+            aria-expanded={isExpanded}
+            aria-controls={`mobile-accordion-${id}`}
+            onClick={() => onToggle(id)}
+          >
+            <span>{label}</span>
+          </button>
+        )}
+        <button
+          type="button"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-600 transition-all duration-300 hover:bg-slate-100/80 active:scale-[0.98]"
+          aria-expanded={isExpanded}
+          aria-controls={`mobile-accordion-${id}`}
+          aria-label={`${isExpanded ? "Collapse" : "Expand"} ${label} menu`}
+          onClick={() => onToggle(id)}
+        >
+          <ChevronDownIcon open={isExpanded} />
+        </button>
+      </div>
 
       <div
         id={`mobile-accordion-${id}`}
@@ -434,6 +460,7 @@ function MobileNavPopover({
                   key={node.id}
                   id={node.id}
                   label={node.label}
+                  overviewHref={node.overviewHref}
                   items={node.items}
                   isExpanded={expandedAccordion === node.id}
                   onToggle={onToggleAccordion}
@@ -476,6 +503,7 @@ function MobileNavPopover({
 function NavDropdown({
   id,
   label,
+  overviewHref,
   items,
   openDropdown,
   onToggle,
@@ -483,6 +511,7 @@ function NavDropdown({
 }: {
   id: DropdownId;
   label: string;
+  overviewHref?: string;
   items: ReadonlyArray<NavLink>;
   openDropdown: DropdownId | null;
   onToggle: (id: DropdownId) => void;
@@ -501,15 +530,34 @@ function NavDropdown({
     : dropdownPanelWrapperClassName;
 
   return (
-    <div className="relative group">
+    <div className="relative group flex items-center">
+      {overviewHref ? (
+        <Link
+          href={overviewHref}
+          className={`${dropdownTriggerClassName} rounded-r-none pr-1.5`}
+          onClick={onSelect}
+        >
+          {label}
+        </Link>
+      ) : (
+        <button
+          type="button"
+          className={dropdownTriggerClassName}
+          aria-expanded={isOpen}
+          aria-haspopup="true"
+          onClick={() => onToggle(id)}
+        >
+          {label}
+        </button>
+      )}
       <button
         type="button"
-        className={dropdownTriggerClassName}
+        className={`${dropdownTriggerClassName} rounded-l-none pl-1`}
         aria-expanded={isOpen}
         aria-haspopup="true"
+        aria-label={`${isOpen ? "Close" : "Open"} ${label} menu`}
         onClick={() => onToggle(id)}
       >
-        {label}
         <ChevronDownIcon open={isOpen} />
       </button>
 
@@ -648,6 +696,7 @@ export function MarketingNav() {
                 key={node.id}
                 id={node.id}
                 label={node.label}
+                overviewHref={node.overviewHref}
                 items={node.items}
                 openDropdown={openDropdown}
                 onToggle={toggleDropdownMenu}

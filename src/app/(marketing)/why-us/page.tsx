@@ -27,7 +27,7 @@ const HOMESCHOOL_BENEFITS = [
 const HIGHLIGHTS = [
   {
     label: "Accreditation",
-    value: "IA 441",
+    value: "Cambridge International Affiliation (CAIE)",
     body: "International Education affiliation—globally recognised standards.",
   },
   {
@@ -81,7 +81,7 @@ const DIFFERENTIATORS = [
   },
   {
     title: "International pathway alignment",
-    body: "We affiliate with International Education (accreditation IA 441)—a serious academic backbone alongside modern, skill-forward learning.",
+    body: "We affiliate with International Education (Cambridge International Affiliation (CAIE))—a serious academic backbone alongside modern, skill-forward learning.",
     bullets: ["Globally recognised standards", "Strong fundamentals", "Clear progression across grades"],
     accent: "from-violet-50 to-fuchsia-50 ring-violet-100",
   },
@@ -190,7 +190,7 @@ export default function WhyUsPage() {
               </h1>
               <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
                 Aalgorix World Academy blends an AI Tutor, industry-trained teachers, and intentional
-                life-skills coaching on an internationally aligned pathway (IA 441)—so learners from
+                life-skills coaching on an internationally aligned pathway (Cambridge International Affiliation (CAIE))—so learners from
                 Grade 3 to Grade 12 grow with clarity, confidence, and real-world readiness from home.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
