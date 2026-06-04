@@ -1,8 +1,8 @@
 import Link from "next/link";
 
+import { FAQ_ENTRIES } from "./faq/faq-content";
 import { MarketingNav } from "./marketing-nav";
 import { BrochureModalCta } from "./brochure-modal-cta";
-import { PublishedCoursesSection } from "./published-courses-section";
 
 const btnPrimary =
   "inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-500 hover:to-violet-500 active:scale-[0.98]";
@@ -12,45 +12,6 @@ const btnGhost =
 
 const btnLink =
   "inline-flex items-center gap-1 text-sm font-semibold text-indigo-700 transition-all duration-200 hover:text-violet-700 active:scale-[0.98]";
-
-const PATHWAYS = [
-  {
-    badge: "British International",
-    badgeClass: "bg-indigo-100 text-indigo-800 ring-indigo-200",
-    title: "British International Curriculum",
-    ages: "Ages 5–18",
-    summary:
-      "Primary through A-Levels with Cambridge-aligned progression: Primary, IGCSE, AS-Level, and A-Levels for UK and global university entry.",
-    accent: "from-indigo-50 to-violet-50 ring-indigo-100",
-  },
-  {
-    badge: "South African CAPS",
-    badgeClass: "bg-amber-100 text-amber-900 ring-amber-200",
-    title: "National South African CAPS / SACAI",
-    ages: "Grade R – Grade 12",
-    summary:
-      "Full national pathway from foundation phase to matric, SACAI-accredited assessments, and university exemption readiness.",
-    accent: "from-amber-50 to-orange-50 ring-amber-100",
-  },
-  {
-    badge: "IEB Pathway",
-    badgeClass: "bg-emerald-100 text-emerald-900 ring-emerald-200",
-    title: "Independent Examinations Board (IEB)",
-    ages: "Grade 1 – Grade 12",
-    summary:
-      "Rigorous independent schooling standard favoured by top South African universities and selective scholarship programmes.",
-    accent: "from-emerald-50 to-teal-50 ring-emerald-100",
-  },
-  {
-    badge: "American NCAA",
-    badgeClass: "bg-violet-100 text-violet-900 ring-violet-200",
-    title: "American High School Diploma",
-    ages: "Grades 9–12",
-    summary:
-      "NCAA eligibility stream with Carnegie-unit credit tracking for US college athletics and international admissions offices.",
-    accent: "from-violet-50 to-indigo-50 ring-violet-100",
-  },
-] as const;
 
 const STEPS = [
   {
@@ -73,6 +34,104 @@ const STEPS = [
     title: "Start Interactive Learning",
     body: "Attend weekly live classes, complete structured coursework, and track progress in your family dashboard.",
   },
+] as const;
+
+const LEARNING_SYSTEM = [
+  {
+    num: "01",
+    title: "Assess",
+    body: "Baseline check to understand level, gaps, and strengths.",
+  },
+  {
+    num: "02",
+    title: "Personalise",
+    body: "AI-first curriculum + supplementary course plan for mastery.",
+  },
+  {
+    num: "03",
+    title: "Coach",
+    body: "Faculty guidance + life coach for consistency and motivation.",
+  },
+  {
+    num: "04",
+    title: "Track",
+    body: "Progress updates for parents—clear, simple, actionable.",
+  },
+] as const;
+
+const FUTURE_READY_PILLARS = [
+  {
+    title: "AI Tutor",
+    body: "Adaptive learning that matches pace, level, and goals.",
+    accent: "from-indigo-50 to-violet-50 ring-indigo-100",
+  },
+  {
+    title: "Industry-trained faculty",
+    body: "Clear explanations, high standards, and expert mentoring.",
+    accent: "from-violet-50 to-fuchsia-50 ring-violet-100",
+  },
+  {
+    title: "Life Coach + life skills",
+    body: "Discipline, confidence, communication, and leadership.",
+    accent: "from-rose-50 to-orange-50 ring-rose-100",
+  },
+  {
+    title: "Talent Support",
+    body: "Identify strengths early and nurture them consistently for a bright future.",
+    accent: "from-emerald-50 to-teal-50 ring-emerald-100",
+  },
+  {
+    title: "Special learning needs",
+    body: "Flexible pacing and extra support for learners who need more care.",
+    accent: "from-sky-50 to-indigo-50 ring-sky-100",
+  },
+] as const;
+
+const HOME_GRADE_BANDS = [
+  {
+    grades: "Grade 3–5",
+    title: "Foundations",
+    body: "Confidence in basics + curiosity-led learning.",
+  },
+  {
+    grades: "Grade 6–8",
+    title: "Explore",
+    body: "Concept depth, projects, and structured habits.",
+  },
+  {
+    grades: "Grade 9–10",
+    title: "Build Concepts",
+    body: "Mastery + supplementary courses to close gaps.",
+  },
+  {
+    grades: "Grade 11–12",
+    title: "Future Ready",
+    body: "Real-world skills, portfolio, and outcomes.",
+  },
+] as const;
+
+const CURRICULUM_HIGHLIGHTS = [
+  {
+    title: "Supplementary Course",
+    body: "Targeted modules that strengthen weak areas and accelerate strengths.",
+  },
+  {
+    title: "Focus on real-world skills",
+    body: "Projects, communication, leadership, and practical application.",
+  },
+  {
+    title: "Learn from safety of your home",
+    body: "Structured schedule + support—without daily commuting.",
+  },
+] as const;
+
+const COLLABORATIONS = [
+  "Canva",
+  "Claude",
+  "ChatGPT",
+  "Gemini",
+  "Copilot",
+  "NotebookLM",
 ] as const;
 
 const FEATURES = [
@@ -116,6 +175,26 @@ const FEATURES = [
       </svg>
     ),
   },
+  {
+    title: "Parent Dashboard",
+    body: "Real-time progress monitoring accessible by parents for seamless oversight and support.",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.75">
+        <path strokeLinecap="round" d="M4 6h16v10H8l-4 4V6z" />
+        <path strokeLinecap="round" d="M8 10h8M8 13h5" />
+      </svg>
+    ),
+  },
+  {
+    title: "Teacher Dashboard",
+    body: "Real-time progress monitoring accessible by teachers for seamless oversight and support.",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.75">
+        <path strokeLinecap="round" d="M4 6h16v10H8l-4 4V6z" />
+        <path strokeLinecap="round" d="M8 10h8M8 13h5" />
+      </svg>
+    ),
+  },
 ] as const;
 
 const PROOF_STATS = [
@@ -138,36 +217,6 @@ const PROOF_STATS = [
     value: "24/7",
     label: "Global Learner Support",
     detail: "On-demand academic mentorship across international time zones.",
-  },
-] as const;
-
-const PRICING_TIERS = [
-  {
-    name: "Starter",
-    price: "From $89",
-    period: "/ month per student",
-    features: ["Core live classes", "Digital resources", "Parent dashboard"],
-  },
-  {
-    name: "Premium",
-    price: "From $149",
-    period: "/ month per student",
-    highlight: true,
-    features: [
-      "Everything in Starter",
-      "Teacher-marked assessments",
-      "Priority advisor access",
-    ],
-  },
-  {
-    name: "Elite",
-    price: "Custom",
-    period: "multi-child & athlete plans",
-    features: [
-      "Dedicated success manager",
-      "Custom pacing & timetables",
-      "NCAA / IEB audit support",
-    ],
   },
 ] as const;
 
@@ -294,6 +343,39 @@ export default function MarketingPage() {
           </div>
         </section>
 
+        {/* Future-ready homeschooling */}
+        <section id="ai-tutor" className="scroll-mt-24 border-b border-slate-100 bg-white py-18 sm:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">
+                Future-ready homeschooling
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Strong academics. Real-world skills.{" "}
+                <span className="bg-gradient-to-r from-indigo-700 to-violet-700 bg-clip-text text-transparent">
+                  Powered by an AI Tutor.
+                </span>
+              </h2>
+              <p className="mt-4 text-lg leading-relaxed text-slate-600">
+                Designed for <strong className="font-semibold text-slate-800">Grade 3 to Grade 12</strong>.
+                Learn from the safety of your home with personalised learning paths, supplementary courses,
+                and mentorship that builds life skills.
+              </p>
+            </div>
+            <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+              {FUTURE_READY_PILLARS.map((pillar) => (
+                <li
+                  key={pillar.title}
+                  className={`rounded-2xl bg-gradient-to-br p-6 ring-1 ${pillar.accent}`}
+                >
+                  <h3 className="text-base font-bold text-slate-900">{pillar.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{pillar.body}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
         {/* 4. Social proof strip */}
         <section
           className="border-y border-slate-200 bg-slate-900 text-white"
@@ -312,53 +394,102 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        {/* 5. Curriculumpathways */}
+        
+
+        {/* How it works — learning system */}
         <section
-          id="curricula-pathways"
-          className="scroll-mt-20 bg-white py-18 sm:py-20"
+          id="how-it-works"
+          className="scroll-mt-24 border-t border-slate-100 bg-slate-50 py-18 sm:py-20"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-                Curriculum Pathways
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">
+                How it works
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                A simple system that delivers results
               </h2>
-              <p className="mt-4 text-lg text-slate-600">
-                Four flagship tracks within the AWA ecosystem—each with specialist teachers,
-                structured pacing, and university-aligned outcomes.
+              <p className="mt-4 text-lg leading-relaxed text-slate-600">
+                Personalised learning isn&apos;t just &ldquo;more content&rdquo;. It&apos;s the right sequence,
+                the right pace, and the right support—so your child builds mastery and confidence.
               </p>
             </div>
-            <div className="mt-14 grid gap-6 sm:grid-cols-2">
-              {PATHWAYS.map((path) => (
-                <article
-                  key={path.title}
-                  className={`flex flex-col rounded-2xl bg-gradient-to-br p-6 ring-1 ${path.accent}`}
-                >
-                  <span
-                    className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ring-1 ${path.badgeClass}`}
-                  >
-                    {path.badge}
-                  </span>
-                  <h3 className="mt-4 text-xl font-bold text-slate-900">{path.title}</h3>
-                  <p className="mt-1 text-sm font-medium text-slate-500">{path.ages}</p>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">
-                    {path.summary}
-                  </p>
-                  <a href="#how-it-works" className={`mt-6 ${btnLink}`}>
-                    Explore Pathway
-                    <span aria-hidden>→</span>
-                  </a>
-                </article>
+            <ol className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+              {LEARNING_SYSTEM.map((step, index) => (
+                <li key={step.num} className="relative">
+                  {index < LEARNING_SYSTEM.length - 1 ? (
+                    <span
+                      aria-hidden
+                      className="absolute right-0 top-8 hidden h-0.5 w-8 translate-x-full bg-gradient-to-r from-indigo-300 to-violet-300 lg:block"
+                    />
+                  ) : null}
+                  <div className="h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-sm font-bold text-white">
+                      {step.num}
+                    </span>
+                    <h3 className="mt-4 text-lg font-bold text-slate-900">{step.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">{step.body}</p>
+                  </div>
+                </li>
               ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* Grade 3–12 AI-first curriculum */}
+        <section id="life-journey" className="scroll-mt-24 bg-white py-18 sm:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">
+                Grade 3 to Grade 12
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                AI-first curriculum with international board affiliation
+              </h2>
+              <p className="mt-4 text-lg leading-relaxed text-slate-600">
+                Built to prepare children for an{" "}
+                <strong className="font-semibold text-slate-800">algorithmic world</strong>—with a strong
+                academic base and a consistent focus on real-world skills and life skills.
+              </p>
+            </div>
+            <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {HOME_GRADE_BANDS.map((band) => (
+                <li
+                  key={band.grades}
+                  className="rounded-2xl border border-slate-200 bg-slate-50/80 p-6 shadow-sm"
+                >
+                  <p className="text-xs font-bold uppercase tracking-wider text-indigo-600">{band.grades}</p>
+                  <h3 className="mt-2 text-lg font-bold text-slate-900">{band.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{band.body}</p>
+                </li>
+              ))}
+            </ul>
+            <ul className="mt-8 grid gap-6 sm:grid-cols-3">
+              {CURRICULUM_HIGHLIGHTS.map((item) => (
+                <li
+                  key={item.title}
+                  className="rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/80 to-violet-50/80 p-6 ring-1 ring-indigo-100"
+                >
+                  <h3 className="text-base font-bold text-slate-900">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.body}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <Link href="/courses" className={btnPrimary}>
+                Explore Programs
+              </Link>
+              <Link href="/contact" className={btnGhost}>
+                Talk to Admissions
+              </Link>
             </div>
           </div>
         </section>
 
-        <PublishedCoursesSection />
-
-        {/* 6. How online school works */}
+        {/* Enrollment journey */}
         <section
-          id="how-it-works"
-          className="scroll-mt-20 border-t border-slate-100 bg-slate-50 py-18 sm:py-20"
+          id="get-started"
+          className="scroll-mt-24 border-t border-slate-100 bg-slate-50 py-18 sm:py-20"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
@@ -391,10 +522,10 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        {/* 7. Ecosystem advantages */}
+        {/* Academy benefits */}
         <section
           id="academy-benefits"
-          className="scroll-mt-20 bg-white py-20 sm:py-24"
+          className="scroll-mt-24 bg-white py-20 sm:py-24"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
@@ -423,31 +554,97 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        
+        {/* FAQ preview */}
+        <section id="parent-faq-vault" className="scroll-mt-24 border-t border-slate-100 bg-slate-50 py-18 sm:py-20">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">FAQ</p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Frequently Asked Questions
+              </h2>
+              <p className="mt-4 text-lg leading-relaxed text-slate-600">
+                Quick answers about AI Tutor, personalised learning, life skills, and admissions.
+              </p>
+            </div>
+            <div className="mt-10 space-y-3">
+              {FAQ_ENTRIES.map((entry) => (
+                <details
+                  key={entry.id}
+                  className="group rounded-xl border border-slate-200 bg-white shadow-sm open:border-indigo-200 open:shadow-md"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left font-semibold text-slate-900 marker:content-none [&::-webkit-details-marker]:hidden">
+                    <span>{entry.question}</span>
+                    <span
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-transform duration-200 group-open:rotate-45 group-open:bg-indigo-100 group-open:text-indigo-700"
+                      aria-hidden
+                    >
+                      +
+                    </span>
+                  </summary>
+                  <div className="border-t border-slate-100 px-5 pb-4 pt-3">
+                    <p className="text-sm leading-relaxed text-slate-600">{entry.answer}</p>
+                  </div>
+                </details>
+              ))}
+            </div>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Link href="/courses" className={btnGhost}>
+                Explore Programs
+              </Link>
+              <Link href="/contact" className={btnPrimary}>
+                Talk to Admissions
+              </Link>
+              <Link href="/faq" className={btnLink}>
+                View all FAQ →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Collaborations */}
+        <section className="border-y border-slate-200 bg-white py-12 sm:py-14">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <p className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">
+              Our Collaborations
+            </p>
+            <ul className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+              {COLLABORATIONS.map((name) => (
+                <li
+                  key={name}
+                  className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700"
+                >
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
         {/* CTA band */}
         <section className="bg-gradient-to-r from-indigo-700 via-violet-700 to-indigo-800 py-16 text-white">
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
             <h2 className="text-2xl font-extrabold sm:text-3xl">
-              Ready to enroll your child?
+              Ready to build a future-ready learning path?
             </h2>
             <p className="mt-4 text-indigo-100">
-              Join families worldwide who trust accredited online schooling with specialist
-              teachers and transparent progress tracking.
+              Talk to admissions to find the right program for Grade 3 to 12. We&apos;ll recommend a
+              personalised plan, supplementary courses, and the right mix of academics + real-world skills.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
                 href="/contact"
                 className="inline-flex rounded-xl bg-white px-6 py-3 text-sm font-semibold text-indigo-800 transition-all duration-200 hover:bg-indigo-50 active:scale-[0.98]"
               >
-                Book a Free Consultation
+                Enroll / Chat Now
               </Link>
-              <Link
-                href="/login"
+              <a
+                href="https://aimasterji.professorsai.org/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex rounded-xl border-2 border-white/40 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.98]"
               >
-                Sign In
-              </Link>
+                Try AI Assistant
+              </a>
             </div>
             <p className="mt-4 text-xs text-indigo-100">
               Free consultation <span className="mx-2 opacity-60">·</span> No obligation{" "}
