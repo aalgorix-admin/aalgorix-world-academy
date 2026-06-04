@@ -27,12 +27,12 @@ export function pathnameMatchesRole(pathname: string, role: UserRole): boolean {
   return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }
 
+/** Dashboard routes only — e.g. /parent-portal is marketing, not /parent dashboard. */
 export function isDashboardPath(pathname: string): boolean {
   return (
-    pathname.startsWith("/student") ||
-    pathname.startsWith("/parent") ||
-    pathname.startsWith("/teacher") ||
-    pathname.startsWith("/admin")
+    Object.values(ROLE_PREFIXES).some(
+      (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+    )
   );
 }
 

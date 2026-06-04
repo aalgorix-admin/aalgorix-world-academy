@@ -102,20 +102,6 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
   },
   {
     type: "dropdown",
-    id: "parent-portal",
-    label: "Parent Portal",
-    items: [
-      { href: "#parent-faq-vault", label: "Parent FAQ Vault" },
-      { href: "#global-family-community", label: "Global Family Community" },
-      { href: "#accountability-handbook", label: "Accountability Handbook" },
-      {
-        href: "#sessions",
-        label: "Sessions: When started?",
-      },
-    ],
-  },
-  {
-    type: "dropdown",
     id: "why-us",
     label: "Why Us",
     items: [
@@ -126,6 +112,21 @@ const NAV_NODES: ReadonlyArray<NavNode> = [
       { href: "/blog", label: "Blog" },
       { href: "/careers", label: "Join Us" },
       { href: "/contact", label: "Contact Us" },
+    ],
+  },
+  {
+    type: "dropdown",
+    id: "parent-portal",
+    label: "Parent Portal",
+    overviewHref: "/parent-portal",
+    items: [
+      { href: "/parent-portal#parent-faq-vault", label: "Parent FAQ Vault" },
+      { href: "/parent-portal#global-family-community", label: "Global Family Community" },
+      { href: "/parent-portal#accountability-handbook", label: "Accountability Handbook" },
+      {
+        href: "/parent-portal#sessions",
+        label: "Sessions: When started?",
+      },
     ],
   },
 ] as const;

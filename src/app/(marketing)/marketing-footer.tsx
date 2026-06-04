@@ -33,6 +33,7 @@ const FOOTER_COLUMNS = [
     title: "Products",
     links: [
       { label: "AI Tutor", href: "/ai-tutor" },
+      { label: "Parent Portal", href: "/parent-portal" },
       { label: "ai4campus", href: "/contact" },
       { label: "AIMasterji", href: "https://aimasterji.professorsai.org/", external: true },
       { label: "Professors AI", href: "https://professorsai.org/", external: true },
