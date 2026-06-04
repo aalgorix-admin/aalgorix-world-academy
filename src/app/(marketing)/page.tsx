@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { CollaborationsCarousel } from "./collaborations-carousel";
 import { FAQ_ENTRIES } from "./faq/faq-content";
 import { MarketingNav } from "./marketing-nav";
 import { BrochureModalCta } from "./brochure-modal-cta";
@@ -123,15 +124,6 @@ const CURRICULUM_HIGHLIGHTS = [
     title: "Learn from safety of your home",
     body: "Structured schedule + support—without daily commuting.",
   },
-] as const;
-
-const COLLABORATIONS = [
-  "Canva",
-  "Claude",
-  "ChatGPT",
-  "Gemini",
-  "Copilot",
-  "NotebookLM",
 ] as const;
 
 const FEATURES = [
@@ -601,24 +593,7 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        {/* Collaborations */}
-        <section className="border-y border-slate-200 bg-white py-12 sm:py-14">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <p className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">
-              Our Collaborations
-            </p>
-            <ul className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-              {COLLABORATIONS.map((name) => (
-                <li
-                  key={name}
-                  className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700"
-                >
-                  {name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+        <CollaborationsCarousel />
 
         {/* CTA band */}
         <section className="bg-gradient-to-r from-indigo-700 via-violet-700 to-indigo-800 py-16 text-white">
